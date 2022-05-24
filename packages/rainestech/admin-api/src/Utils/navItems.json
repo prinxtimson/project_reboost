@@ -1,0 +1,96 @@
+[
+    {
+        "app": "whyte",
+        "module": "Admin",
+        "name": "Manage Users",
+        "privilege": "ROLE_ADMIN_USERS",
+        "url": "/admin/users",
+        "icon": "icon-people",
+        "orderNo": 10,
+        "hasChildren": false,
+        "onNav": true
+    },
+    {
+        "app": "whyte",
+        "module": "Admin",
+        "name": "Manage Roles",
+        "privilege": "ROLE_ADMIN_ROLES",
+        "url": "/admin/roles",
+        "icon": "icon-lock",
+        "orderNo": 11,
+        "hasChildren": false,
+        "onNav": true
+    },
+    {
+        "app": "whyte",
+        "module": "Admin",
+        "name": "Access Control",
+        "privilege": "ROLE_ADMIN_ACCESS",
+        "url": "/admin/access",
+        "icon": "icon-login",
+        "orderNo": 12,
+        "hasChildren": false
+    },
+    {
+        "app": "whyte",
+        "module": "Admin",
+        "name": "User Activity",
+        "privilege": "ROLE_ADMIN_ACTIVITY",
+        "url": "/admin/activity",
+        "icon": "icon-login",
+        "orderNo": 13,
+        "hasChildren": false
+    },
+    {
+        "app": "whyte",
+        "module": "Dashboard",
+        "name": "Dashboard",
+        "privilege": "ROLE_PROFILE",
+        "url": "/dashboard",
+        "icon": "icon-user",
+        "orderNo": 1,
+        "hasChildren": false,
+        "onNav": true
+    },
+    {
+        "app": "whyte",
+        "module": "Chat",
+        "name": "Chat",
+        "privilege": "ROLE_CHAT",
+        "url": "/chat",
+        "icon": "icon-docs",
+        "orderNo": 2,
+        "hasChildren": false,
+        "onNav": true
+    },
+    {
+        "app": "whyte",
+        "module": "Channels",
+        "name": "Channels",
+        "privilege": "ROLE_CHANNELS",
+        "url": "/channels",
+        "icon": "icon-options-vertical",
+        "orderNo": 3,
+        "hasChildren": false
+    },
+    {
+        "app": "whyte",
+        "module": "Tasks",
+        "name": "Tasks",
+        "privilege": "ROLE_TASKS",
+        "url": "/tasks",
+        "icon": "icon-magnifier",
+        "orderNo": 4,
+        "hasChildren": false
+    },
+    {
+        "app": "whyte",
+        "module": "Calendar",
+        "name": "Calendar",
+        "privilege": "ROLE_CALENDAR",
+        "url": "/calendar",
+        "icon": "icon-list",
+        "orderNo": 5,
+        "hasChildren": false
+    }
+]
