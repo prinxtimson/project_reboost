@@ -2,7 +2,6 @@
 
 namespace Rainestech\Personnel\Controllers;
 
-use App\Models\User;
 use App\Notifications\ProfileUpdated;
 use Rainestech\AdminApi\Controllers\BaseApiController;
 use Rainestech\AdminApi\Entity\Documents;
@@ -81,6 +80,7 @@ class ProfileController extends BaseApiController {
     }
 
     public function updateRecruiter(RecruiterRequest $request) {
+        $user = auth('api')->user();
         if (!$recruiters = Recruiters::find($request->input('id')))
             return $this->jsonError(404, 'Record Not Found for Update');
 
@@ -89,8 +89,7 @@ class ProfileController extends BaseApiController {
         $recruiters->fsId = $request->input('logo.id');
         $recruiters->update();
 
-        $user = User::find($request->input('user.id'));
-        $user->notify(new ProfileUpdated($recruiters));
+        $user->notify(new ProfileUpdated($user));
 
         return response()->json(Recruiters::where('id', $recruiters->id)
             ->first());
@@ -132,15 +131,17 @@ class ProfileController extends BaseApiController {
     }
 
     public function updateCandidate(CandidatesRequest $request) {
+        $user = auth('api')->user();
         if (!$candidates = Candidates::find($request->input('id')))
             return $this->jsonError(404, 'Record Not Found for Update');
 
-        $candidates->fill($request->except(['user', 'id']));
+        $candidates->fill($request->except(['user', 'id', 'availability']));
+        $candidates->securedJob = $request->input('availability') === 'securedJob' ? true : false;
+        $candidates->isAvailable = $request->input('availability') === 'available' ? true : false;
         $candidates->userId = $request->input('user.id');
         $candidates->update();
 
-        $user = User::find($request->input('user.id'));
-        $user->notify(new ProfileUpdated($candidates));
+        $user->notify(new ProfileUpdated($user));
 
         return response()->json(Candidates::with('user')
             ->where('id', $candidates->id)

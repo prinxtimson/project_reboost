@@ -111,8 +111,10 @@ trait Register {
     {
         return Users::create([
             'username' => $data['username'],
+            'firstName' => $data['firstName'],
+            'lastName' => $data['lastName'],
             'status' => $status,
-            'adminVerified' => false,
+            'adminVerified' => true,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'companyName' => $data['companyName'],

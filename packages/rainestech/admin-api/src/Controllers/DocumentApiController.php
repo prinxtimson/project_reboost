@@ -2,6 +2,7 @@
 
 namespace Rainestech\AdminApi\Controllers;
 
+use App\Notifications\DocDeleted;
 use App\Notifications\DocUploaded;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -30,7 +31,7 @@ class DocumentApiController extends BaseApiController {
         $doc->save();
         $doc->loadWith();
         
-        Notification::send($user, new  DocUploaded($doc));
+        $user->notify(new  DocUploaded($doc));
 
         return response()->json($doc);
     }
@@ -61,6 +62,7 @@ class DocumentApiController extends BaseApiController {
         if (!$fs = FileStorage::where('link', $link)->first())
             abort(404, 'File Not Found');
         $file = storage_path('app' . DIRECTORY_SEPARATOR . $fs->tag . DIRECTORY_SEPARATOR . $fs->link);
+       if(!Storage::exists('documents/'.$link)) return response('File not found', 404);
 
         $response = response()->file($file);
         if (ob_get_length()) ob_end_clean();
@@ -74,7 +76,7 @@ class DocumentApiController extends BaseApiController {
         $this->deleteFile($fs->tag, $fs->link);
         $fs->delete();
 
-        Notification::send($user, new  DocUploaded($fs));
+        $user->notify(new  DocDeleted($fs));
 
         return response()->json($fs);
     }
@@ -86,7 +88,7 @@ class DocumentApiController extends BaseApiController {
         $this->deleteFile($fs->file->tag, $fs->file->link);
         $fs->delete();
 
-        Notification::send($user, new  DocUploaded($fs));
+        $user->notify(new  DocDeleted($fs));
         
         return response()->json([]);
     }

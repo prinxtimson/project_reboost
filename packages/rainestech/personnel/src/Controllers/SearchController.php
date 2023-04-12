@@ -96,6 +96,7 @@ class SearchController extends BaseApiController
     }
 
     public function shortList(ShortListRequest $request) {
+        $user = auth('api')->user();
         $profile = Recruiters::where('userId', auth('api')->id())->first();
         
         $candidate = Candidates::find($request->input('id'));
@@ -103,17 +104,18 @@ class SearchController extends BaseApiController
         if (strtolower($request->input('action')) == 'add'){
             if (!$profile->candidates()->find($request->input('id'))) {
                 $profile->candidates()->attach($request->input('id'));
-                Notification::send($candidate->user, new Shortlisted($profile));
+                $user->notify(new Shortlisted($profile));
             }
         }else {
             $profile->candidates()->detach($request->input('id'));
-            Notification::send($candidate->user, new NotShortlisted($profile));
+            $user->notify(new NotShortlisted($profile));
         }
             
         return response()->json([]);
     }
 
     public function favourite(ShortListRequest $request) {
+        $user = auth('api')->user();
         $profile = Candidates::where('userId', auth('api')->id())->first();
         
         $recruiter = Recruiters::find($request->input('id'));
@@ -121,11 +123,11 @@ class SearchController extends BaseApiController
         if (strtolower($request->input('action')) == 'add'){
             if (!$profile->recruiters()->find($request->input('id'))) {
                 $profile->recruiters()->attach($request->input('id'));
-                Notification::send($recruiter->user, new Shortlisted($profile));
+                $user->notify(new Shortlisted($profile));
             }
         }else {
             $profile->recruiters()->detach($request->input('id'));
-            Notification::send($recruiter->user, new NotShortlisted($profile));
+            $user->notify(new NotShortlisted($profile));
         }
             
         return response()->json([]);

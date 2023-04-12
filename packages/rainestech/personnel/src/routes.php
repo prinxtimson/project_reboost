@@ -1,24 +1,25 @@
 <?php
 
 use Rainestech\Personnel\Controllers\ChatController;
+use Rainestech\Personnel\Controllers\NotificationController;
 use Rainestech\Personnel\Controllers\ProfileController;
 use Rainestech\Personnel\Controllers\RequestController;
 use Rainestech\Personnel\Controllers\SearchController;
 
 Route::group(['middleware' => 'admin.api', 'prefix' => 'profile'], function () {
     Route::get('/skillset', [ProfileController::class, 'getSkillSets'])->name('skillset.index');
-    Route::get('/recruiters', [ProfileController::class, 'recruiters'])->middleware('access:ROLE_ADMIN_RECRUITERS')->name('recruiter.index');
+    Route::get('/recruiters', [ProfileController::class, 'recruiters'])->name('recruiter.index');
     Route::get('/', [ProfileController::class, 'getMyProfile'])->middleware('access:ROLE_PROFILE')->name('profile.index');
     Route::get('/candidates', [ProfileController::class, 'candidates'])->name('candidates.index');
-    Route::get('/rid/{id}', [ProfileController::class, 'getRecruiterByUserID'])->name('recruiter.user.id');
-    Route::get('/cid/{id}', [ProfileController::class, 'getCandidatesByUserID'])->name('candidate.user.id');
+    Route::get('/recruiters/{id}', [ProfileController::class, 'getRecruiterByUserID'])->name('recruiter.user.id');
+    Route::get('/candidates/{id}', [ProfileController::class, 'getCandidatesByUserID'])->name('candidate.user.id');
     Route::post('/recruiters', [ProfileController::class, 'saveRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.save');
     Route::put('/recruiters', [ProfileController::class, 'updateRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.update');
     Route::put('/status', [ProfileController::class, 'changeStatus'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('status.update');
-    Route::post('/candidates', [ProfileController::class, 'saveCandidate'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('candidate.save');
-    Route::put('/candidates', [ProfileController::class, 'updateCandidate'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('candidate.update');
+    Route::post('/candidates', [ProfileController::class, 'saveCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.save');
+    Route::put('/candidates', [ProfileController::class, 'updateCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.update');
     Route::delete('/recruiter/remove/{id}', [ProfileController::class, 'removeRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.delete');
-    Route::delete('/candidate/remove/{id}', [ProfileController::class, 'removeCandidate'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('candidate.delete');
+    Route::delete('/candidate/remove/{id}', [ProfileController::class, 'removeCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.delete');
     Route::get('/recruiter/verify/{id}', [ProfileController::class, 'verify'])->middleware('access:ROLE_ADMIN_RECRUITERS')->name('admin.recruiter.verify');
 });
 
@@ -66,4 +67,10 @@ Route::group(['middleware' => 'admin.api', 'prefix' => 'snippets'], function () 
     Route::get('/name/{name}', [SearchController::class, 'getSnippet'])->name('snippet.name');
     Route::post('/', [SearchController::class, 'saveSnippet'])->name('snippet.save');
     Route::delete('/remove/{id}', [SearchController::class, 'deleteSnippet'])->name('snippet.delete');
+});
+
+Route::group(['middleware' => 'admin.api', 'prefix' => 'notification'], function () {
+    Route::get('/', [NotificationController::class, 'get'])->name('notification.index');
+    Route::post('/view', [NotificationController::class, 'profileView'])->name('notification.view');
+    Route::get('/mark', [NotificationController::class, 'mark'])->name('notification.mark');
 });

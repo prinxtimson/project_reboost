@@ -25,7 +25,7 @@ class UserApiController extends BaseApiController {
     use Login, Register, Security, ErrorResponse, LmsLogin;
 
     public function index() {
-        return Users::all();
+        return Users::orderBy('id', 'DESC')->get();
     }
 
     public function login(Request $request) {
@@ -110,7 +110,7 @@ class UserApiController extends BaseApiController {
 
     public function changePassword(Request $request) {
         $request->validate([
-           'password' => 'required|string',
+           'password' => 'required|string|confirmed',
            'oldPassword' => 'required|string',
             'id' => 'integer|required|exists:admin_users,id'
         ]);
@@ -244,6 +244,8 @@ class UserApiController extends BaseApiController {
         $user = Users::find($request->get('id'));
         $user->firstName = $request->get('firstName');
         $user->lastName = $request->get('lastName');
+        $user->otherName = $request->get('otherName');
+        $user->phoneNo = $request->get('phoneNo');
         $user->companyName = $request->get('companyName');
         $user->username = $request->get('username');
         $user->email = $request->get('email');

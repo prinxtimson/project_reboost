@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Rainestech\AdminApi\Entity\Users;
 
 class ProfileUpdated extends Notification
 {
@@ -19,7 +20,7 @@ class ProfileUpdated extends Notification
      *
      * @return void
      */
-    public function __construct($profile)
+    public function __construct(Users $profile)
     {
         $this->profile = $profile;
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
   <base href="/">
@@ -29,7 +29,8 @@
   <meta content="#ffffff" name="msapplication-TileColor">
   <meta content="/assets/ms-icon-144x144.png" name="msapplication-TileImage">
   <meta content="#ffffff" name="theme-color">
-  <title>Project Supreme</title>
+  <title>Tritek Careers</title>
+  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   <style>
   @-webkit-keyframes fa-spin {
     0% {
@@ -235,7 +236,7 @@
 
   @-webkit-keyframes taskHighlighter {
     0% {
-      background: #FEEB99
+      background: #feeb99
     }
 
     to {
@@ -437,12 +438,15 @@
   </noscript>
 </head>
 
-<body class="app">
+<body class="antialiased" >
+  <div class="app" id="app"></div>
   <!-- App Loading... -->
-  <script src="runtime.js" type="module"></script>
+  <script src="{{ asset('js/app.js') }}" ></script>
+  <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+  <!-- <script src="runtime.js" type="module"></script>
   <script src="polyfills.js" type="module"></script>
-  <script src="main.js" type="module"></script>
-
+  <script src="scripts.js" defer></script>
+  <script src="main.js" type="module"></script> -->
 </body>
 
 </html>

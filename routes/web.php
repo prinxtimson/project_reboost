@@ -17,6 +17,51 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/register', function () {
+    return view('welcome');
+});
+
+Route::get('/contact', function () {
+    return view('welcome');
+});
+
+Route::get('/password/forgot', function () {
+    return view('welcome');
+});
+
+Route::get('/password/reset', function () {
+    return view('welcome');
+});
+
+
+Route::group([ "prefix" => "dashboard"], function () {
+    Route::get("", function () {
+        return view('welcome');
+    });
+
+    Route::group(["prefix" => "profile"], function () {
+        Route::get("", function () {
+            return view('welcome');
+        });
+        Route::get("edit", function () {
+            return view('welcome');
+        });
+    });
+
+    Route::get('change-password', function () {
+        return view('welcome');
+    });
+
+    Route::group(["prefix" => 'users'], function () {
+        Route::get("", function () {
+            return view('welcome');
+        });
+        Route::get("add", function () {
+            return view('welcome');
+        });
+    });
+});
+
 Route::get('/basecamp/login', [\App\Http\Controllers\BasecampController::class, 'login'])->name('basecamp.login');
 Route::get('/basecamp', [\App\Http\Controllers\BasecampController::class, 'callback'])->name('basecamp.callback');
 Route::get('/basecamp/projects', [\App\Http\Controllers\BasecampController::class, 'projects'])->name('basecamp.projects');
