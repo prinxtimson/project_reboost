@@ -71,6 +71,9 @@ export const authSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        updatePassport: (state, action) => {
+            state.user.passport = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -103,6 +106,7 @@ export const authSlice = createSlice({
                 state.isSuccess = true;
                 state.type = action.type;
                 state.user = action.payload;
+                state.message = "Personal details have been saved";
             })
             .addCase(editMe.rejected, (state, action) => {
                 state.isLoading = false;
@@ -131,5 +135,5 @@ export const authSlice = createSlice({
     },
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, updatePassport } = authSlice.actions;
 export default authSlice.reducer;

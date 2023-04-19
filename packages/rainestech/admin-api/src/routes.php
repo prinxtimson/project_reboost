@@ -42,6 +42,16 @@ Route::group(['prefix' => 'contact'], function () {
 
 Route::group(['middleware' => 'admin.api'], function () {
     Route::get('/users', [UserApiController::class, 'index'])->name('users');
+
+    Route::get('/users/admin', [UserApiController::class, 'getAdmins'])->name('users.admin');
+    Route::get('/users/admin/search', [UserApiController::class, 'searchAdmin'])->name('users.admin.search');
+
+    Route::get('/users/candidate', [UserApiController::class, 'getCandidates'])->name('users.candidate');
+    Route::get('/users/candidate/search', [UserApiController::class, 'searchCandidates'])->name('users.candidate.search');
+
+    Route::get('/users/recruiter', [UserApiController::class, 'getRecruiters'])->name('users.recruiter');
+    Route::get('/users/recruiter/search', [UserApiController::class, 'searchRecruiters'])->name('users.recruiter.search');
+
     Route::get('/users/s/{username}/{type}', [UserApiController::class, 'search'])->name('users.search');
     Route::get('/users/me', [UserApiController::class, 'me'])->name('users.me');
     Route::get('/users/logout', [UserApiController::class, 'logout'])->name('logout');

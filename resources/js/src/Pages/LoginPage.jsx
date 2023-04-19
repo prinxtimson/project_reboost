@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [formData, setFormData] = useState({
         username: "",
         password: "",
+        remember_me: false,
     });
 
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ const LoginPage = () => {
         (state) => state.auth
     );
 
-    const { username, password } = formData;
+    const { username, password, remember_me } = formData;
 
     useEffect(() => {
         if (isError && type === "auth/login/rejected") {
@@ -45,11 +46,10 @@ const LoginPage = () => {
             <div className="card p-2">
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
-                        <h1>Login</h1>
-                        <p className="text-muted">
+                        {/* <p className="text-muted">
                             Sign In to your account or{" "}
                             <Link to="/register">Recruiter Registration</Link>{" "}
-                        </p>
+                        </p> */}
 
                         <div className="input-group mb-3">
                             <div className="input-group-prepend">
@@ -105,21 +105,23 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        <div className="row">
+                        <div className="row mb-2">
                             <div className="col-6">
-                                <button
-                                    className="btn btn-primary"
-                                    type="submit"
-                                    disabled={isLoading}
-                                >
-                                    Login
-                                </button>
-                                {isLoading && (
-                                    <img
-                                        className="pl-2"
-                                        src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                                <label className="d-flex align-items-center pt-2">
+                                    <input
+                                        type="checkbox"
+                                        name="remember_me"
+                                        id="remember_me"
+                                        value={remember_me}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                remember_me: e.target.checked,
+                                            })
+                                        }
                                     />
-                                )}
+                                    <span className="mx-2">Remember me</span>
+                                </label>
                             </div>
                             <div className="col-6 text-right">
                                 <Link
@@ -130,6 +132,21 @@ const LoginPage = () => {
                                     Forgot password?
                                 </Link>
                             </div>
+                        </div>
+                        <div className="">
+                            <button
+                                className="btn btn-primary"
+                                type="submit"
+                                disabled={isLoading}
+                            >
+                                Login
+                            </button>
+                            {isLoading && (
+                                <img
+                                    className="pl-2"
+                                    src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                                />
+                            )}
                         </div>
                         {isError && type === "auth/login/rejected" && (
                             <div className="alert alert-danger mt-2">

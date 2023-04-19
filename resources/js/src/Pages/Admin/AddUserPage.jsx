@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import AuthContainer from "../../components/AuthContainer";
+import { toast } from "react-toastify";
 import { addNewUser, reset } from "../../features/user/userSlice";
 
 const AddUserPage = () => {
@@ -11,6 +12,7 @@ const AddUserPage = () => {
         firstName: "",
         lastName: "",
         companyName: "",
+        location: "",
         status: "1",
         role: "ADMIN",
         password: "",
@@ -26,12 +28,14 @@ const AddUserPage = () => {
         setTimeout(() => dispatch(reset()), 5000);
 
         if (isSuccess && type === "user/add-new-user/fulfilled") {
+            toast.success(message, { onClose: () => dispatch(reset()) });
             setFormData({
                 username: "",
                 email: "",
                 firstName: "",
                 lastName: "",
                 companyName: "",
+                location: "",
                 status: "1",
                 role: "ADMIN",
                 password: "",
@@ -58,9 +62,6 @@ const AddUserPage = () => {
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item">
                                     <Link to="/dashboard">Dashboard</Link>
-                                </li>
-                                <li className="breadcrumb-item">
-                                    <Link to="/dashboard/users">Users</Link>
                                 </li>
                                 <li className="breadcrumb-item active">
                                     Add User
@@ -143,24 +144,41 @@ const AddUserPage = () => {
                                         <div>Last name is required</div>
                                     </div>
                                 </div>
-                            </div>
-                            {/* <!--/.row--> */}
-                            <div className="form-group">
-                                <label htmlFor="phoneNo">Company Name</label>
-                                <input
-                                    className="form-control"
-                                    name="companyName"
-                                    value={formData.companyName}
-                                    id="phoneNo"
-                                    onChange={handleOnChange}
-                                    placeholder="Company Name (Leave blank htmlFor candidates)..."
-                                    type="text"
-                                />
-                                <div className="invalid-feedback">
-                                    <div></div>
+                                <div className="form-group col-sm-6">
+                                    <label htmlFor="location">Location</label>
+                                    <input
+                                        className="form-control"
+                                        name="location"
+                                        value={formData.location}
+                                        id="location"
+                                        type="text"
+                                        onChange={handleOnChange}
+                                    />
+                                    <div className="invalid-feedback">
+                                        <div>Last location is required</div>
+                                    </div>
+                                </div>
+                                <div className="form-group col-sm-6">
+                                    <label htmlFor="phoneNo">
+                                        Company Name
+                                    </label>
+                                    <input
+                                        className="form-control"
+                                        name="companyName"
+                                        value={formData.companyName}
+                                        id="phoneNo"
+                                        onChange={handleOnChange}
+                                        placeholder="Company Name (Leave blank For candidates)..."
+                                        type="text"
+                                    />
+                                    <div className="invalid-feedback">
+                                        <div></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            {/* <!--/.row--> */}
+
+                            {/* <div className="form-group row">
                                 <label
                                     htmlFor="select1"
                                     className="col-md-6 col-form-label"
@@ -179,7 +197,7 @@ const AddUserPage = () => {
                                         <option value="0">Deactivate</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="form-group row">
                                 <label
                                     htmlFor="select2"

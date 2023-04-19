@@ -32,8 +32,15 @@ class ProfileController extends BaseApiController {
     }
 
     public function getRecruiterByUserID($userID) {
-        if (!$p = Recruiters::where('userId', $userID)->first())
+        if (!$p = Recruiters::where('userId', $userID)->with("user")->first())
             return $this->jsonError(404, 'Recruiter Record Not Found!');
+
+        return response()->json($p);
+    }
+
+    public function getCandidateByUserID($userID) {
+        if (!$p = Candidates::where('userId', $userID)->with(["user", "projects"])->first())
+            return $this->jsonError(404, 'Candidate Record Not Found!');
 
         return response()->json($p);
     }
@@ -212,14 +219,41 @@ class ProfileController extends BaseApiController {
 
         $user = Users::find($recruiter->userId);
         if ($user && !$user->adminVerified) {
+           
             $user->adminVerified = true;
             $user->status = true;
             $user->save();
+
+            $recruiter->update([
+                'rejectionReason' => null
+            ]);
+            $recruiter->refresh()->load("user");
 
             $mail = new EmailNotifications();
             $mail->sendVerificationApproved($user);
         }
 
-        return response()->json([]);
+        return response()->json($recruiter);
+    }
+
+    public function reject(Request $request, $id) {
+        if (!$recruiter = Recruiters::find($id)) {
+            return $this->jsonError(422, 'Recruiter not found for verification');
+        }
+
+        $recruiter->update([
+            'rejectionReason' => $request->input('reason')
+        ]);
+
+        $recruiter->refresh()->load("user");
+
+        $user = Users::find($recruiter->userId);
+        if ($user && $user->adminVerified) {
+            $user->adminVerified = false;
+            $user->status = false;
+            $user->save();
+        }
+
+        return response()->json($recruiter);
     }
 }

@@ -11,6 +11,8 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Rainestech\Personnel\Entity\Candidates;
+use Rainestech\Personnel\Entity\Recruiters;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
@@ -121,6 +123,16 @@ class Users extends Authenticatable implements JWTSubject
 
     public function roles() {
         return $this->belongsToMany(Roles::class, 'admin_user_role', 'user_id', 'role_id');
+    }
+
+    public function candidate()
+    {
+        return $this->hasOne(Candidates::class, 'userId');
+    }
+
+    public function recruiter()
+    {
+        return $this->hasOne(Recruiters::class, 'userId');
     }
 
     public function docs() {

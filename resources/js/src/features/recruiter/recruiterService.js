@@ -32,6 +32,11 @@ const verifyRecruiter = async (id) => {
     return res.data;
 };
 
+const rejectRecruiter = async (data) => {
+    const res = await axios.put(`${API_URL}/reject/${data.id}`, data);
+    return res.data;
+};
+
 const deleteRecruiters = async (id) => {
     const res = await axios.delete(`${API_URL}/remove/${id}`);
     return res.data;
@@ -44,6 +49,7 @@ const recruiterService = {
     getRecruiterByUserId,
     editRecruiters,
     verifyRecruiter,
+    rejectRecruiter,
     deleteRecruiters,
 };
 

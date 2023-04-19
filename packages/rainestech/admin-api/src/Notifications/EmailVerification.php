@@ -2,6 +2,8 @@
 
 namespace Rainestech\AdminApi\Notifications;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Mail;
 use Rainestech\AdminApi\Entity\ContactMessages;
 use Rainestech\AdminApi\Entity\MailTemplates;
@@ -35,16 +37,19 @@ class EmailVerification
 
     public function resetPassword(Users $user)
     {
-        $user->lastPwd = $this->generatePin();
+        $token = Hash::make(Str::random(40));
+        $user->lastPwd = $token;
         $user->save();
 
         $name = $user->companyName ? $user->companyName : $user->name;
+
+        $reset_url = env("APP_URL") . "/password/reset" . "/" . $token . "?email=" . $user->email;
 
         $temp = MailTemplates::where('name', 'OTP')->first();
         if ($temp) {
             $message = $temp->template;
             $messag = str_replace('{{username}}', strtoupper($name), $message);
-            $messa = str_replace('{{token}}', $user->lastPwd, $messag);
+            $messa = str_replace('{{reset_url}}', $reset_url, $messag);
             $mess = str_replace('{{platform}}', 'Tritek Careers', $messa);
             Mail::send('notification', ['template' => $mess], function ($mail) use ($temp, $user) {
                 $mail->to($user->email, $user->username);

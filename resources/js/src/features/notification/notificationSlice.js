@@ -78,6 +78,17 @@ export const notificationSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        onNewNotification: (state, action) => {
+            if (
+                state.notifications.data.filter(
+                    (val) => val.id === action.payload.id
+                ).length === 0
+            ) {
+                let data = [action.payload, ...state.notifications.data];
+                let count = state.notifications.count + 1;
+                state.notifications = { data, count };
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -132,5 +143,5 @@ export const notificationSlice = createSlice({
     },
 });
 
-export const { reset } = notificationSlice.actions;
+export const { reset, onNewNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MainContainer from "../components/MainContainer";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { forgotPassword, reset } from "../features/user/userSlice";
 
 const ForgotPassword = () => {
@@ -20,8 +21,8 @@ const ForgotPassword = () => {
         }
 
         if (isSuccess && type === "user/forgot-password/fulfilled") {
-            setTimeout(() => dispatch(reset()), 5000);
-            navigate("/password/reset");
+            toast.success(message, { onClose: () => dispatch(reset()) });
+            navigate("/");
         }
         // return () => dispatch(reset());
     }, [isLoading, isSuccess, isError]);
@@ -36,10 +37,10 @@ const ForgotPassword = () => {
             <div className="card px-4 py-4">
                 <div className="animated fadeIn card-body">
                     <form onSubmit={handleSubmit}>
-                        <h1>Forgot Password</h1>
+                        <h1>Forgot Password?</h1>
                         <p className="text-muted">
-                            Please enter your email address. You will receive an
-                            OTP to create a new password via email.
+                            No worries, a password reset link will be sent to
+                            your email address
                         </p>
 
                         <div className="input-group mb-3">
@@ -60,14 +61,14 @@ const ForgotPassword = () => {
                                 <div>Email is required</div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-6">
+                        <div className="row align-items-center justify-content-center">
+                            <div className="col-12 text-center">
                                 <button
                                     disabled={isLoading}
                                     className="btn btn-primary"
                                     type="submit"
                                 >
-                                    Request OTP
+                                    Send Reset Password Link
                                 </button>
                                 {isLoading && (
                                     <img
@@ -77,7 +78,7 @@ const ForgotPassword = () => {
                                 )}
                             </div>
 
-                            <div className="col-6 text-right">
+                            <div className="col-12 text-center ">
                                 <Link
                                     to="/"
                                     className="btn btn-link px-0"

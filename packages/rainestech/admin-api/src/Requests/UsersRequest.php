@@ -33,6 +33,9 @@ class UsersRequest extends FormRequest
                     'oldPassword'  => 'nullable|string|between:6,100',
                     'role'  => 'string|exists:admin_roles,role',
                     'status'  => 'boolean',
+                    'otherName' => 'nullable|string|between:3,100',
+                    'postCode' => 'nullable|string|between:6,8',
+                    'location' => 'nullable|string|between:3,100'
                 ];
             }
 

@@ -39,6 +39,12 @@ trait Register {
                     $user->save();
                 }
             }
+
+            if ($role->role == 'RECRUITER') {
+                $recruiters = new Recruiters($request->except(['logo', 'username', 'password']));
+                $recruiters->userId = $user->id;
+                $recruiters->save();
+            }
         }
 
         if ($request->has('status')) {
@@ -109,15 +115,21 @@ trait Register {
      */
     protected function create(array $data, bool $status)
     {
+        $adminVerified = false;
+        if($data['role'] === 'ADMIN' || $data['role'] === 'CANDIDATE'){
+            $adminVerified = true;
+        }
+        
         return Users::create([
             'username' => $data['username'],
             'firstName' => $data['firstName'],
             'lastName' => $data['lastName'],
             'status' => $status,
-            'adminVerified' => true,
+            'adminVerified' => $adminVerified,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'companyName' => $data['companyName'],
+            'location' => $data['location']
         ]);
     }
 

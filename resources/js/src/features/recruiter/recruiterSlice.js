@@ -106,6 +106,44 @@ export const editRecruiters = createAsyncThunk(
     }
 );
 
+export const verifyRecruiter = createAsyncThunk(
+    "recruiter/verify-recruiters",
+    async (id, thunkAPI) => {
+        try {
+            return await recruiterService.verifyRecruiter(id);
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.response.data ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
+export const rejectRecruiter = createAsyncThunk(
+    "recruiter/reject-recruiters",
+    async (data, thunkAPI) => {
+        try {
+            return await recruiterService.rejectRecruiter(data);
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.response.data ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
 export const deleteRecruiters = createAsyncThunk(
     "recruiter/del-recruiters",
     async (id, thunkAPI) => {
@@ -181,6 +219,40 @@ export const recruiterSlice = createSlice({
                 state.type = action.type;
             })
             .addCase(getRecruiterByUserId.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(verifyRecruiter.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(verifyRecruiter.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.recruiter = action.payload;
+                state.type = action.type;
+                state.message = "Recruiter approved successful";
+            })
+            .addCase(verifyRecruiter.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(rejectRecruiter.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(rejectRecruiter.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.recruiter = action.payload;
+                state.type = action.type;
+                state.message = "Recruiter rejected successful";
+            })
+            .addCase(rejectRecruiter.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.type = action.type;

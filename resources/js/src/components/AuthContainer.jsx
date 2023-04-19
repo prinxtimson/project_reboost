@@ -39,187 +39,179 @@ const AuthContainer = ({ children }) => {
                         </Link>
                     </div>
                     <div className="flex-grow-1">
-                        <ul className="nav justify-content-end">
+                        <ul className="nav justify-content-end align-items-center">
                             <li className="nav-item dropdown">
-                                <div>
-                                    <a
-                                        className="nav-link dropdown-toggle"
-                                        href="#"
-                                        id="notificationDropdown"
-                                        role="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
+                                <a
+                                    className=""
+                                    href="#"
+                                    id="notificationDropdown"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <span
+                                        style={{
+                                            textAlign: "center",
+                                            position: "relative",
+                                        }}
                                     >
-                                        <span
-                                            style={{
-                                                textAlign: "center",
-                                                position: "relative",
-                                            }}
+                                        <i
+                                            className="fa fa-bell"
+                                            style={{ fontSize: 20 }}
                                         >
-                                            <i className="fa fa-bell"> </i>
-                                        </span>
-                                    </a>
+                                            {" "}
+                                        </i>
+                                    </span>
+                                </a>
 
-                                    <ul
-                                        style={{ minWidth: 350 }}
-                                        className="dropdown-menu"
-                                        aria-labelledby="notificationDropdown"
-                                    >
-                                        {notifications &&
-                                        notifications?.count > 0 ? (
-                                            notifications.data.map((item) => (
-                                                <li key={item.id}>
-                                                    <Link
-                                                        to="notifications"
-                                                        className="dropdown-item"
-                                                    >
-                                                        {item.type ==
-                                                        "App\\Notifications\\Shortlisted" ? (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                You've been
-                                                                shortlisted by{" "}
-                                                                {
-                                                                    item.data
-                                                                        .user
-                                                                        .companyName
-                                                                }
-                                                            </span>
-                                                        ) : item.type ==
-                                                          "App\\Notifications\\NotShortlisted" ? (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                You've been
-                                                                removed from
-                                                                shortlist by
-                                                                {
-                                                                    item.data
-                                                                        .user
-                                                                        .companyName
-                                                                }
-                                                            </span>
-                                                        ) : item.type ==
-                                                          "App\\Notifications\\Favourited" ? (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                You've been
-                                                                favourited by
-                                                                {
-                                                                    item.data
-                                                                        .user
-                                                                        .name
-                                                                }
-                                                            </span>
-                                                        ) : item.type ==
-                                                          "App\\Notifications\\ProfileUpdated" ? (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                Your profile was
-                                                                updated
-                                                            </span>
-                                                        ) : item.type ==
-                                                          "App\\Notifications\\DocDeleted" ? (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.data
-                                                                        .doc
-                                                                        .name
-                                                                }{" "}
-                                                                document had
-                                                                been deleted
-                                                            </span>
-                                                        ) : item.type ==
-                                                          "App\\Notifications\\DocUploaded" ? (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                {
-                                                                    item.data
-                                                                        .doc
-                                                                        .name
-                                                                }{" "}
-                                                                document had
-                                                                been uploaded
-                                                            </span>
-                                                        ) : (
-                                                            <span
-                                                                className={
-                                                                    item.read_at
-                                                                        ? ""
-                                                                        : "font-weight-bold"
-                                                                }
-                                                            >
-                                                                Your profile was
-                                                                view by
-                                                                {
-                                                                    item.data
-                                                                        .user
-                                                                        .name
-                                                                }
-                                                            </span>
-                                                        )}
-                                                        <small>
-                                                            {moment(
-                                                                item.created_at
-                                                            ).fromNow()}
-                                                        </small>
-                                                    </Link>
-                                                </li>
-                                            ))
-                                        ) : (
-                                            <li>
+                                <ul
+                                    style={{ minWidth: 350 }}
+                                    className="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="notificationDropdown"
+                                >
+                                    {notifications &&
+                                    notifications?.count > 0 ? (
+                                        notifications.data.map((item) => (
+                                            <li key={item.id}>
                                                 <Link
-                                                    to="notifications"
-                                                    className="dropdown-item"
+                                                    to="#"
+                                                    className="dropdown-item d-flex"
                                                 >
-                                                    <span>
-                                                        No notifications yet
-                                                    </span>
+                                                    {item.type ==
+                                                    "App\\Notifications\\Shortlisted" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            You've been
+                                                            shortlisted by{" "}
+                                                            {
+                                                                item.data.user
+                                                                    .companyName
+                                                            }
+                                                        </div>
+                                                    ) : item.type ==
+                                                      "App\\Notifications\\NotShortlisted" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            You've been removed
+                                                            from shortlist by
+                                                            {
+                                                                item.data.user
+                                                                    .companyName
+                                                            }
+                                                        </div>
+                                                    ) : item.type ==
+                                                      "App\\Notifications\\Favourited" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            You've been
+                                                            favourited by
+                                                            {
+                                                                item.data.user
+                                                                    .name
+                                                            }
+                                                        </div>
+                                                    ) : item.type ==
+                                                      "App\\Notifications\\ProfileUpdated" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            Your profile was
+                                                            updated
+                                                        </div>
+                                                    ) : item.type ==
+                                                      "App\\Notifications\\DocDeleted" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            {item.data.doc.name}{" "}
+                                                            document had been
+                                                            deleted
+                                                        </div>
+                                                    ) : item.type ==
+                                                      "App\\Notifications\\DocUploaded" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            {item.data.doc.name}{" "}
+                                                            document had been
+                                                            uploaded
+                                                        </div>
+                                                    ) : (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            Your profile was
+                                                            view by
+                                                            {
+                                                                item.data.user
+                                                                    .name
+                                                            }
+                                                        </div>
+                                                    )}
+                                                    <small>
+                                                        {moment(
+                                                            item.created_at
+                                                        ).fromNow()}
+                                                    </small>
                                                 </Link>
                                             </li>
-                                        )}
-                                    </ul>
-                                </div>
+                                        ))
+                                    ) : (
+                                        <li>
+                                            <Link
+                                                to="notifications"
+                                                className="dropdown-item"
+                                            >
+                                                <span>
+                                                    No notifications yet
+                                                </span>
+                                            </Link>
+                                        </li>
+                                    )}
+                                </ul>
                             </li>
                             <li className="nav-item text-center mx-2">
                                 <h5 className="mb-0">{`${user?.firstName} ${user?.lastName}`}</h5>
-                                <p>{user?.role}</p>
+                                <p className="mb-0" style={{ fontSize: 10 }}>
+                                    {user?.role}
+                                </p>
                             </li>
                             <li className="nav-item dropdown">
                                 <a
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
-                                    className="nav-link dropdown-toggle avatar"
+                                    className=" dropdown-toggle avatar"
                                     id="avatarDropdown"
                                     href="#"
                                     role="button"
@@ -229,8 +221,12 @@ const AuthContainer = ({ children }) => {
                                             !user?.avatar && !user?.passport
                                                 ? "/assets/img/avatars/0.jpeg"
                                                 : user?.avatar
-                                                ? user?.avatar
-                                                : `/fs/dl/${user?.passport.link}`
+                                                ? `${
+                                                      user?.avatar
+                                                  }?${new Date().getTime()}`
+                                                : `/fs/dl/${
+                                                      user?.passport.link
+                                                  }?${new Date().getTime()}`
                                         }
                                         alt={`${user?.firstName} ${user?.lastName}`}
                                         className=""
@@ -270,8 +266,8 @@ const AuthContainer = ({ children }) => {
                     </div>
                 </div>
             </nav>
-            <main className="flex-grow-1 d-flex flex-column">
-                <div className="flex-grow-1 d-flex">
+            <main className="flex-grow-1 d-flex flex-column ">
+                <div className="flex-grow-1 d-flex" style={{ height: "90vh" }}>
                     <nav
                         className={`flex-column d-none flex-shrink-0 px-3 py-2 d-lg-flex `}
                         style={{
@@ -331,7 +327,7 @@ const AuthContainer = ({ children }) => {
                                     <ul className="nav nav-pills flex-column mb-auto">
                                         <li className="ps-3">
                                             <Link
-                                                to="/dashboard/users"
+                                                to="/dashboard/users/admin"
                                                 className="nav-link text-white"
                                             >
                                                 Admin
@@ -339,7 +335,7 @@ const AuthContainer = ({ children }) => {
                                         </li>
                                         <li className="ps-3">
                                             <Link
-                                                to="/dashboard/users"
+                                                to="/dashboard/users/candidate"
                                                 className="nav-link text-white"
                                             >
                                                 Candidates
@@ -347,7 +343,7 @@ const AuthContainer = ({ children }) => {
                                         </li>
                                         <li className="ps-3">
                                             <Link
-                                                to="/dashboard/users"
+                                                to="/dashboard/users/recruiter"
                                                 className="nav-link text-white"
                                             >
                                                 Recruiters
@@ -393,7 +389,7 @@ const AuthContainer = ({ children }) => {
                             </li>
                         </ul>
                     </nav>
-                    <div className="flex-grow-1 d-flex flex-column">
+                    <div className="flex-grow-1 d-flex flex-column overflow-auto">
                         <div className="flex-grow-1">{children}</div>
                         <div className="footer">
                             <div className="row">

@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import MainContainer from "../components/MainContainer";
+import { toast } from "react-toastify";
 import { reset, resetPassword } from "../features/user/userSlice";
 
 const ResetPassword = () => {
+    const { token } = useParams();
+    const search = new URLSearchParams(useLocation().search);
     const [visible, setVisible] = useState(false);
     const [formData, setFormData] = useState({
-        otp: "",
-        email: "",
+        token: token,
+        email: search.get("email"),
         password: "",
         password_confirmation: "",
     });
@@ -26,7 +29,7 @@ const ResetPassword = () => {
         }
 
         if (isSuccess && type === "user/reset-password/fulfilled") {
-            setTimeout(() => dispatch(reset()), 5000);
+            toast.success(message, { onClose: () => dispatch(reset()) });
             navigate("/");
         }
         // return () => dispatch(reset());
@@ -54,25 +57,6 @@ const ResetPassword = () => {
                         <div className="input-group mb-3">
                             <div className="input-group-prepend">
                                 <span className="input-group-text">
-                                    <i className="fa fa-lock"></i>
-                                </span>
-                            </div>
-                            <input
-                                className="form-control"
-                                onChange={handleOnChange}
-                                name="otp"
-                                placeholder="OTP"
-                                required
-                                type="text"
-                                autoComplete="new-otp"
-                            />
-                            <div className="invalid-feedback">
-                                <div>OTP is required</div>
-                            </div>
-                        </div>
-                        <div className="input-group mb-3">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">
                                     <i className="icon-user"></i>
                                 </span>
                             </div>
@@ -81,9 +65,9 @@ const ResetPassword = () => {
                                 className="form-control"
                                 name="email"
                                 placeholder="Email address"
-                                required
+                                value={formData.email}
                                 type="email"
-                                onChange={handleOnChange}
+                                readOnly
                             />
                             <div className="invalid-feedback">
                                 <div>Username is required</div>

@@ -25,7 +25,107 @@ class UserApiController extends BaseApiController {
     use Login, Register, Security, ErrorResponse, LmsLogin;
 
     public function index() {
-        return Users::orderBy('id', 'DESC')->get();
+        return Users::orderBy('id', 'DESC')->paginate(20);
+    }
+
+    public function getAdmins(Request $request) 
+    {
+        $orderBy = $request->get('order_by');
+        $sortBy = $request->get('sort_by');
+        
+        if(isset($orderBy)){
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'ADMIN');
+                })->orderBy($orderBy, $sortBy)->paginate(20);
+    
+            return response()->json($users, 200);
+        } else {
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'ADMIN');
+                })->orderBy('id', 'DESC')->paginate(20);
+    
+            return response()->json($users, 200);
+        }
+
+    }
+
+    public function searchAdmin(Request $request)
+    {
+        $query = $request->get('query');
+        $users = Users::whereHas(
+            'roles', function($q){
+                $q->where('role', 'ADMIN');
+            })->where('firstName', 'like', '%'.$query.'%')->orWhere('lastName', 'like', '%'.$query.'%')->orWhere('email', 'like', '%'.$query.'%')->get();
+
+        return response()->json($users, 200);
+    }
+
+    public function getCandidates(Request $request)
+    {
+        $orderBy = $request->get('order_by');
+        $sortBy = $request->get('sort_by');
+        
+        if(isset($orderBy)){
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'CANDIDATE');
+                })->whereHas('candidate')->orderBy($orderBy, $sortBy)->paginate(20);
+    
+            return response()->json($users, 200);
+        }else {
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'CANDIDATE');
+                })->whereHas('candidate')->orderBy('id', 'DESC')->paginate(20);
+    
+            return response()->json($users, 200);
+        }
+    }
+
+    public function searchCandidates(Request $request)
+    {
+        $query = $request->get('query');
+        $users = Users::whereHas(
+            'roles', function($q){
+                $q->where('role', 'CANDIDATE');
+            })->whereHas('candidate')->where('firstName', 'like', '%'.$query.'%')->orWhere('lastName', 'like', '%'.$query.'%')->orWhere('email', 'like', '%'.$query.'%')->orWhere('location', 'like', '%'.$query.'%')->get();
+
+        return response()->json($users, 200);
+    }
+
+    public function getRecruiters(Request $request)
+    {
+        $orderBy = $request->get('order_by');
+        $sortBy = $request->get('sort_by');
+
+        if(isset($orderBy)){
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'RECRUITER');
+                })->whereHas('recruiter')->orderBy($orderBy, $sortBy)->paginate(20);
+    
+            return response()->json($users, 200);
+        }else {
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'RECRUITER');
+                })->whereHas('recruiter')->orderBy('id', 'DESC')->paginate(20);
+    
+            return response()->json($users, 200);
+        }
+    }
+
+    public function searchRecruiters(Request $request)
+    {
+        $query = $request->get('query');
+        $users = Users::whereHas(
+            'roles', function($q){
+                $q->where('role', 'RECRUITER');
+            })->whereHas('recruiter')->where('firstName', 'like', '%'.$query.'%')->orWhere('lastName', 'like', '%'.$query.'%')->orWhere('email', 'like', '%'.$query.'%')->orWhere('otherName', 'like', '%'.$query.'%')->orWhere('location', 'like', '%'.$query.'%')->orWhere('companyName', 'like', '%'.$query.'%')->get();
+
+        return response()->json($users, 200);
     }
 
     public function login(Request $request) {
@@ -164,13 +264,13 @@ class UserApiController extends BaseApiController {
     public function resetPassword(PasswordRequest $request)
     {
         $user = Users::where('email', $request->input('email'))
-            ->where('lastPwd', $request->input('otp'))->first();
+            ->where('lastPwd', $request->input('token'))->first();
 
         if ($user) {
             if ($user->updated_at->addMinutes(20) < Carbon::now()) {
                 $email = new EmailVerification();
                 $email->resetPassword($user);
-                abort(400, 'Expired Token, a new one has been regenerated');
+                abort(400, 'Link Expired, a new one has been regenerated');
             }
 
             clock($request->input('password'));
@@ -244,15 +344,41 @@ class UserApiController extends BaseApiController {
         $user = Users::find($request->get('id'));
         $user->firstName = $request->get('firstName');
         $user->lastName = $request->get('lastName');
-        $user->otherName = $request->get('otherName');
-        $user->phoneNo = $request->get('phoneNo');
-        $user->companyName = $request->get('companyName');
-        $user->username = $request->get('username');
-        $user->email = $request->get('email');
-        $user->status = $request->get('status');
+
+        if($request->get('otherName')){
+            $user->otherName = $request->get('otherName');
+        }
+
+        if($request->get('postCode')){
+            $user->postCode = $request->get('postCode');
+        }
+
+        if($request->get('companyName')){
+            $user->companyName = $request->get('companyName');
+        }
+
+        if($request->get('email')){
+            $user->email = $request->get('email');
+        }
+
+        if($request->get('phoneNo')){
+            $user->phoneNo = $request->get('phoneNo');
+        }
+
+        if($request->get('username')){
+            $user->username = $request->get('username');
+        }
+
+        if($request->get('status')){
+            $user->status = $request->get('status');
+        }
 
         if (strlen($request->get('password')) > 6) {
             $user->password = Hash::make($request->get('password'));
+        }
+
+        if($request->get('location')){
+            $user->location = $request->get('location');
         }
 
         $user->save();
@@ -303,7 +429,7 @@ class UserApiController extends BaseApiController {
     public function remove($id) {
         $user = Users::findOrFail($id);
 
-        $user->delete();
+        $user->forceDelete();
         return response()->json($user);
     }
 

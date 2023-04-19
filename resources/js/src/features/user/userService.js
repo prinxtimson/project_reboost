@@ -8,6 +8,72 @@ const getUsers = async () => {
     return res.data;
 };
 
+const getAdmins = async (data) => {
+    if (data) {
+        const res = await axios.get(
+            `${API_URL}/admin?order_by=${data.orderBy}&sort_by=${data.sortBy}`
+        );
+
+        return res.data;
+    } else {
+        const res = await axios.get(`${API_URL}/admin`);
+
+        return res.data;
+    }
+};
+
+const searchAdmins = async (query) => {
+    const res = await axios.get(`${API_URL}/admin/search?query=${query}`);
+
+    return res.data;
+};
+
+const getCandidates = async (data) => {
+    if (data) {
+        const res = await axios.get(
+            `${API_URL}/candidate?order_by=${data.orderBy}&sort_by=${data.sortBy}`
+        );
+
+        return res.data;
+    } else {
+        const res = await axios.get(`${API_URL}/candidate`);
+
+        return res.data;
+    }
+};
+
+const searchCandidates = async (query) => {
+    const res = await axios.get(`${API_URL}/candidate/search?query=${query}`);
+
+    return res.data;
+};
+
+const getRecruiters = async (data) => {
+    if (data) {
+        const res = await axios.get(
+            `${API_URL}/recruiter?order_by=${data.orderBy}&sort_by=${data.sortBy}`
+        );
+
+        return res.data;
+    } else {
+        const res = await axios.get(`${API_URL}/recruiter`);
+
+        return res.data;
+    }
+};
+
+const searchRecruiters = async (query) => {
+    const res = await axios.get(`${API_URL}/recruiter/search?query=${query}`);
+
+    return res.data;
+};
+
+const getNextPage = async (url) => {
+    const res = await axios.get(url);
+
+    return res.data;
+};
+
 const getUserByName = async (name, type) => {
     const res = await axios.get(`${API_URL}/s/${name}/${type}`);
 
@@ -86,6 +152,13 @@ const deleteUser = async (data) => {
 const userService = {
     getUsers,
     getUserByName,
+    getNextPage,
+    getAdmins,
+    getCandidates,
+    getRecruiters,
+    searchAdmins,
+    searchCandidates,
+    searchRecruiters,
     editUser,
     updateUser,
     changePassword,

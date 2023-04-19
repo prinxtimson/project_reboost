@@ -12,15 +12,16 @@ Route::group(['middleware' => 'admin.api', 'prefix' => 'profile'], function () {
     Route::get('/', [ProfileController::class, 'getMyProfile'])->middleware('access:ROLE_PROFILE')->name('profile.index');
     Route::get('/candidates', [ProfileController::class, 'candidates'])->name('candidates.index');
     Route::get('/recruiters/{id}', [ProfileController::class, 'getRecruiterByUserID'])->name('recruiter.user.id');
-    Route::get('/candidates/{id}', [ProfileController::class, 'getCandidatesByUserID'])->name('candidate.user.id');
+    Route::get('/candidates/{id}', [ProfileController::class, 'getCandidateByUserID'])->name('candidate.user.id');
     Route::post('/recruiters', [ProfileController::class, 'saveRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.save');
     Route::put('/recruiters', [ProfileController::class, 'updateRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.update');
     Route::put('/status', [ProfileController::class, 'changeStatus'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('status.update');
     Route::post('/candidates', [ProfileController::class, 'saveCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.save');
     Route::put('/candidates', [ProfileController::class, 'updateCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.update');
-    Route::delete('/recruiter/remove/{id}', [ProfileController::class, 'removeRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.delete');
-    Route::delete('/candidate/remove/{id}', [ProfileController::class, 'removeCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.delete');
-    Route::get('/recruiter/verify/{id}', [ProfileController::class, 'verify'])->middleware('access:ROLE_ADMIN_RECRUITERS')->name('admin.recruiter.verify');
+    Route::delete('/recruiters/remove/{id}', [ProfileController::class, 'removeRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.delete');
+    Route::delete('/candidates/remove/{id}', [ProfileController::class, 'removeCandidate'])->middleware('access:ROLE_PROFILE')->name('candidate.delete');
+    Route::get('/recruiters/verify/{id}', [ProfileController::class, 'verify'])->middleware('access:ROLE_ADMIN_RECRUITERS')->name('admin.recruiter.verify');
+    Route::put('/recruiters/reject/{id}', [ProfileController::class, 'reject'])->middleware('access:ROLE_ADMIN_RECRUITERS')->name('admin.recruiter.reject');
 });
 
 Route::group(['middleware' => 'admin.api'], function () {

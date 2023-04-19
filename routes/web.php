@@ -29,7 +29,7 @@ Route::get('/password/forgot', function () {
     return view('welcome');
 });
 
-Route::get('/password/reset', function () {
+Route::get('/password/reset/{token}', function () {
     return view('welcome');
 });
 
@@ -48,18 +48,26 @@ Route::group([ "prefix" => "dashboard"], function () {
         });
     });
 
+    Route::get("add-user", function () {
+        return view('welcome');
+    });
+
     Route::get('change-password', function () {
         return view('welcome');
     });
 
     Route::group(["prefix" => 'users'], function () {
-        Route::get("", function () {
+        Route::get("{path}", function () {
             return view('welcome');
         });
-        Route::get("add", function () {
+        Route::get("recruiter/{id}", function () {
+            return view('welcome');
+        });
+        Route::get("candidate/{id}", function () {
             return view('welcome');
         });
     });
+
 });
 
 Route::get('/basecamp/login', [\App\Http\Controllers\BasecampController::class, 'login'])->name('basecamp.login');

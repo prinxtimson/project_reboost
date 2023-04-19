@@ -82,7 +82,7 @@ const OffsetSidebar = () => {
                                 <ul className="nav nav-pills flex-column mb-auto">
                                     <li className="ps-3">
                                         <Link
-                                            to="/dashboard/users"
+                                            to="/dashboard/users/admin"
                                             className="nav-link text-dark"
                                         >
                                             Admin
@@ -90,7 +90,7 @@ const OffsetSidebar = () => {
                                     </li>
                                     <li className="ps-3">
                                         <Link
-                                            to="/dashboard/candidates"
+                                            to="/dashboard/users/candidate"
                                             className="nav-link text-dark"
                                         >
                                             Candidates
@@ -98,7 +98,7 @@ const OffsetSidebar = () => {
                                     </li>
                                     <li className="ps-3">
                                         <Link
-                                            to="/dashboard/recruiters"
+                                            to="/dashboard/users/recruiter"
                                             className="nav-link text-dark"
                                         >
                                             Recruiters

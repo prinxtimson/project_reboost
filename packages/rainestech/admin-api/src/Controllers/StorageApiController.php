@@ -48,7 +48,7 @@ class StorageApiController extends BaseApiController {
 //        clock(Storage::disk('app')->getVisibility($fs->tag . '/' . $fs->link));
         $file = storage_path('app' . DIRECTORY_SEPARATOR . $fs->tag . DIRECTORY_SEPARATOR . $fs->link);
 
-        if(!Storage::disk('local')->exists('documents/'.$link)) return response('File not found', 404);
+        if(!Storage::disk('local')->exists($fs->tag.'/'.$link)) return response('File not found', 404);
         
         $response = response()->file($file);
         if (ob_get_length()) ob_end_clean();

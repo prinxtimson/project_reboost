@@ -1,10 +1,15 @@
 import ReactDOM from "react-dom";
+import { useEffect, useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
+import { ToastContainer } from "react-toastify";
 
 import "../../css/app.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import { store } from "./store";
+import { onNewNotification } from "./features/notification/notificationSlice";
+
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import ForgotPassword from "./Pages/ForgotPassword";
@@ -18,9 +23,25 @@ import ChangePasswordPage from "./Pages/Admin/ChangePasswordPage";
 import EditProfile from "./Pages/Admin/EditProfilePage";
 import GuestRoute from "./utils/GuestRoute";
 import AuthRoute from "./utils/AuthRoute";
-import { useEffect } from "react";
+import RecruiterProfilePage from "./Pages/Admin/RecruiterProfilePage";
+import CandidateProfilePage from "./Pages/Admin/CandidateProfilePage";
 
 const App = () => {
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+
+    useMemo(() => {
+        if (user) {
+            window.Echo.private(`App.Models.User.${user?.id}`).notification(
+                (notification) => {
+                    console.log(notification);
+
+                    dispatch(onNewNotification(notification));
+                }
+            );
+        }
+    }, [user]);
+
     useEffect(() => {
         const token = localStorage.getItem("jwt_token");
 
@@ -28,8 +49,9 @@ const App = () => {
             window.axios.defaults.headers.common["Authorization"] = token;
         }
     }, []);
+
     return (
-        <Provider store={store}>
+        <>
             <BrowserRouter>
                 <Routes>
                     <Route
@@ -58,6 +80,14 @@ const App = () => {
                                 </AuthRoute>
                             }
                         />
+                        <Route
+                            path="add-user"
+                            element={
+                                <AuthRoute>
+                                    <AddUserPage />
+                                </AuthRoute>
+                            }
+                        />
                         <Route path="profile">
                             <Route
                                 path=""
@@ -76,24 +106,30 @@ const App = () => {
                                 }
                             />
                         </Route>
-                        <Route path="users">
-                            <Route
-                                path=""
-                                element={
-                                    <AuthRoute>
-                                        <UsersPage />
-                                    </AuthRoute>
-                                }
-                            />
-                            <Route
-                                path="add"
-                                element={
-                                    <AuthRoute>
-                                        <AddUserPage />
-                                    </AuthRoute>
-                                }
-                            />
-                        </Route>
+                        <Route
+                            path="users/:path"
+                            element={
+                                <AuthRoute>
+                                    <UsersPage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="users/recruiter/:id"
+                            element={
+                                <AuthRoute>
+                                    <RecruiterProfilePage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="users/candidate/:id"
+                            element={
+                                <AuthRoute>
+                                    <CandidateProfilePage />
+                                </AuthRoute>
+                            }
+                        />
 
                         <Route
                             path="change-password"
@@ -113,7 +149,7 @@ const App = () => {
                         }
                     />
                     <Route
-                        path="/password/reset"
+                        path="/password/reset/:token"
                         element={
                             <GuestRoute>
                                 <ResetPassword />
@@ -122,7 +158,8 @@ const App = () => {
                     />
                 </Routes>
             </BrowserRouter>
-        </Provider>
+            <ToastContainer autoClose={5000} />
+        </>
     );
 };
 
@@ -131,5 +168,10 @@ export default App;
 if (document.getElementById("app")) {
     const element = document.getElementById("app");
 
-    ReactDOM.render(<App />, element);
+    ReactDOM.render(
+        <Provider store={store}>
+            <App />
+        </Provider>,
+        element
+    );
 }

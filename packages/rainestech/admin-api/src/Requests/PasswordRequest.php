@@ -29,7 +29,7 @@ class PasswordRequest extends FormRequest
             {
                 return [
                     'email' => 'required|email|exists:admin_users,email',
-                    'otp' => 'required|string|between:3,50|exists:admin_users,lastPwd',
+                    'token' => 'required|string|between:3,100|exists:admin_users,lastPwd',
                     'password' => 'required|string|confirmed|between:6,100',
                 ];
             }

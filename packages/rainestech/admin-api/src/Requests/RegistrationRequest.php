@@ -38,6 +38,8 @@ class RegistrationRequest extends FormRequest
                     'type'  => 'string|required|between:2,100',
                     'size'  => 'string|required|between:2,100',
                     'logo.id'  => 'integer|required|exists:file_storage,id',
+                    'role' => 'required|string',
+                    'location' => 'nullable|string|between:3,100'
                 ];
             }
 

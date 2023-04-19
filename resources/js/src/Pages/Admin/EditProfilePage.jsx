@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContainer from "../../components/AuthContainer";
-import { editMe, reset } from "../../features/auth/authSlice";
+import { toast } from "react-toastify";
+import { editMe, reset, updatePassport } from "../../features/auth/authSlice";
 import axios from "axios";
 
 const EditProfilePage = () => {
@@ -14,9 +15,10 @@ const EditProfilePage = () => {
         lastName: "",
         phoneNo: "",
         otherName: "",
+        postCode: "",
     });
 
-    const { firstName, lastName, phoneNo, otherName } = formData;
+    const { firstName, lastName, phoneNo, otherName, postCode } = formData;
 
     const dispatch = useDispatch();
     const { user, isLoading, isError, isSuccess, message, type } = useSelector(
@@ -33,6 +35,7 @@ const EditProfilePage = () => {
             lastName: user?.lastName || "",
             phoneNo: user?.phoneNo || "",
             otherName: user?.otherName || "",
+            postCode: user?.postCode || "",
         });
         let _avatar =
             !user?.avatar && !user?.passport
@@ -46,6 +49,9 @@ const EditProfilePage = () => {
     useEffect(() => {
         setTimeout(() => dispatch(reset()), 5000);
 
+        if (isSuccess) {
+            toast.success(message, { onClose: () => dispatch(reset()) });
+        }
         // return () => dispatch(reset());
     }, [isLoading, isSuccess, isError]);
 
@@ -54,12 +60,26 @@ const EditProfilePage = () => {
 
     const handleFileSelect = (e) => {
         setFile(e.target.files[0]);
+        let _data = new FormData();
+        _data.append("file", e.target.files[0]);
+        _data.append("name", e.target.files[0].name);
+        _data.append("tag", "passport");
 
-        // axios.post("/v1/fs", {
-        //     id: user.id,
-        //     file: e.target.files[0],
-        //     tag: "passport"
-        // })
+        if (user.passport) {
+            _data.append("id", user.passport.id);
+        } else {
+            _data.append("objID", user.id);
+        }
+        axios
+            .post("/api/v1/fs", _data)
+            .then((res) => {
+                console.log(res.data);
+                dispatch(updatePassport(res.data));
+                toast.success("Profile picture uploaded successfully");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         setAvatar(URL.createObjectURL(e.target.files[0]));
     };
 
@@ -74,7 +94,7 @@ const EditProfilePage = () => {
             <div className="p-4">
                 <div className="page-head">
                     <div className="">
-                        <h3 className="page-title">Edit Profile</h3>
+                        <h3 className="page-title">Edit Personal Details</h3>
                         <ul className="breadcrumb">
                             <li className="breadcrumb-item">
                                 <Link to="/dashboard">Dashboard</Link>
@@ -83,23 +103,28 @@ const EditProfilePage = () => {
                                 <Link to="/dashboard/profile">Profile</Link>
                             </li>
                             <li className="breadcrumb-item active">
-                                Edit Profile
+                                Edit Personal Details
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div className="animated fadeIn bg-white shadow rounded overflow-hidden p-4 my-3">
                     <form onSubmit={handleOnSubmit} className="form row g-3">
-                        <div className="py-2 position-relative mb-3 avatar">
+                        <div className="py-2 position-relative mb-3 ">
                             <img
                                 src={avatar}
                                 alt={firstName}
-                                className="rounded-circle mx-auto d-block"
+                                className="rounded-circle mx-auto d-block text-center"
                                 width={150}
                                 height={150}
-                                style={{ cursor: "pointer" }}
+                                style={{
+                                    cursor: "pointer",
+                                    backgroundColor: "#aaa",
+                                    color: "#fff",
+                                }}
                                 onClick={() => inputRef?.click()}
                             />
+
                             <input
                                 type="file"
                                 onChange={(e) => handleFileSelect(e)}
@@ -143,7 +168,6 @@ const EditProfilePage = () => {
                                 id="floatingInput"
                                 value={otherName}
                                 onChange={handleOnChange}
-                                required
                             />
                         </div>
                         <div className="mb-3 col-6">
@@ -156,6 +180,19 @@ const EditProfilePage = () => {
                                 value={phoneNo}
                                 onChange={handleOnChange}
                                 required
+                            />
+                        </div>
+                        <div className="mb-3 col-6">
+                            <input
+                                type="text"
+                                className="form-control "
+                                placeholder="Post Code"
+                                name="postCode"
+                                id="floatingInput"
+                                value={postCode}
+                                onChange={handleOnChange}
+                                maxLength={8}
+                                minLength={6}
                             />
                         </div>
                         <div className=" col-12 ">
