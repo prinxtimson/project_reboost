@@ -49,9 +49,27 @@ export const getCandidates = createAsyncThunk(
 
 export const searchCandidates = createAsyncThunk(
     "user/search-candidates",
-    async (query, thunkAPI) => {
+    async (args, thunkAPI) => {
         try {
-            return await userService.searchCandidates(query);
+            return await userService.searchCandidates(args);
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
+export const filterCandidates = createAsyncThunk(
+    "user/filter-candidates",
+    async (args, thunkAPI) => {
+        try {
+            return await userService.filterCandidates(args);
         } catch (err) {
             const msg =
                 (err.response &&
@@ -124,6 +142,24 @@ export const searchRecruiters = createAsyncThunk(
     async (args, thunkAPI) => {
         try {
             return await userService.searchRecruiters(args);
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
+export const filterRecruiters = createAsyncThunk(
+    "user/filter-recruiters",
+    async (args, thunkAPI) => {
+        try {
+            return await userService.filterRecruiters(args);
         } catch (err) {
             const msg =
                 (err.response &&
@@ -393,6 +429,10 @@ export const userSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.user = null;
+            state.users = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -476,6 +516,22 @@ export const userSlice = createSlice({
                 state.type = action.type;
                 state.message = action.payload;
             })
+            .addCase(filterCandidates.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(filterCandidates.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.type = action.type;
+                state.users.data = action.payload;
+            })
+            .addCase(filterCandidates.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
             .addCase(getRecruiters.pending, (state, action) => {
                 state.isLoading = true;
                 state.type = action.type;
@@ -503,6 +559,22 @@ export const userSlice = createSlice({
                 state.users.data = action.payload;
             })
             .addCase(searchRecruiters.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(filterRecruiters.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(filterRecruiters.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.type = action.type;
+                state.users.data = action.payload;
+            })
+            .addCase(filterRecruiters.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.type = action.type;
@@ -582,7 +654,7 @@ export const userSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.type = action.type;
-                state.message = action.payload;
+                state.message = "Password change successful";
             })
             .addCase(changePassword.rejected, (state, action) => {
                 state.isLoading = false;
@@ -631,7 +703,7 @@ export const userSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.type = action.type;
-                state.message = action.payload;
+                state.message = "User verified successful";
             })
             .addCase(verifyNewUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -647,7 +719,8 @@ export const userSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.type = action.type;
-                state.message = action.payload;
+                state.message =
+                    "Please check your email for the password reset link";
             })
             .addCase(forgotPassword.rejected, (state, action) => {
                 state.isLoading = false;
@@ -679,7 +752,7 @@ export const userSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.type = action.type;
-                state.message = action.payload;
+                state.message = "Password reset successful";
             })
             .addCase(resetPassword.rejected, (state, action) => {
                 state.isLoading = false;
@@ -727,5 +800,5 @@ export const userSlice = createSlice({
     },
 });
 
-export const { reset } = userSlice.actions;
+export const { reset, clear } = userSlice.actions;
 export default userSlice.reducer;

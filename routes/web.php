@@ -48,7 +48,27 @@ Route::group([ "prefix" => "dashboard"], function () {
         });
     });
 
+    Route::get("documents", function () {
+        return view('welcome');
+    });
+
+    Route::get("documents/{id}", function () {
+        return view('welcome');
+    });
+
     Route::get("add-user", function () {
+        return view('welcome');
+    });
+
+    Route::get("task-manager", function () {
+        return view('welcome');
+    });
+
+    Route::get("task-manager/view/{id}", function () {
+        return view('welcome');
+    });
+
+    Route::get("task-manager/my-tasks", function () {
         return view('welcome');
     });
 

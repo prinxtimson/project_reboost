@@ -27,7 +27,7 @@ class DocumentRequest extends FormRequest {
                     'id'    => 'integer|exists:admin_documents,id',
                     'file.id'    => 'integer|required|exists:file_storage,id',
                     'name'  => 'required|between:3,100|string',
-                    'description'  => 'required|string|between:3,200',
+                    'description'  => 'nullable|string|between:3,200',
                     'private'  => 'required|boolean',
                 ];
             }

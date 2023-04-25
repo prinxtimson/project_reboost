@@ -17,7 +17,7 @@ const ProfilePage = () => {
                             <h3 className="page-title">Profile</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item">
-                                    <Link href="/dashboard">Dashboard</Link>
+                                    <Link to="/dashboard">Dashboard</Link>
                                 </li>
                                 <li className="breadcrumb-item active">
                                     Profile

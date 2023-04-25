@@ -9,6 +9,8 @@ import recruiter from "./features/recruiter/recruiterSlice";
 import role from "./features/role/roleSlice";
 import search from "./features/search/searchSlice";
 import user from "./features/user/userSlice";
+import task from "./features/task/taskSlice";
+import activity from "./features/activity/activitySlice";
 
 export const store = configureStore({
     reducer: {
@@ -22,5 +24,7 @@ export const store = configureStore({
         role,
         search,
         user,
+        task,
+        activity,
     },
 });

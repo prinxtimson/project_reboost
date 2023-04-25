@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import docsService from "./docsService";
 
 const initialState = {
-    documents: null,
+    documents: [],
     document: null,
     file: null,
     type: "",
@@ -52,8 +52,14 @@ export const getUserDocs = createAsyncThunk(
 
 export const saveDocs = createAsyncThunk(
     "document/save-documents",
-    async (data, thunkAPI) => {
+    async (args, thunkAPI) => {
         try {
+            let file = await docsService.saveFile(args);
+            const data = {
+                file,
+                name: file.name,
+                private: false,
+            };
             return await docsService.saveDocs(data);
         } catch (err) {
             const msg =
@@ -88,11 +94,11 @@ export const updateDocs = createAsyncThunk(
     }
 );
 
-export const saveFile = createAsyncThunk(
-    "document/save-file",
+export const updateFile = createAsyncThunk(
+    "document/update-file",
     async (data, thunkAPI) => {
         try {
-            return await docsService.saveFile(data);
+            return await docsService.updateFile(data);
         } catch (err) {
             const msg =
                 (err.response &&
@@ -107,11 +113,11 @@ export const saveFile = createAsyncThunk(
     }
 );
 
-export const updateFile = createAsyncThunk(
-    "document/update-file",
-    async (data, thunkAPI) => {
+export const archiveDocs = createAsyncThunk(
+    "document/archive-documents",
+    async (id, thunkAPI) => {
         try {
-            return await docsService.updateFile(data);
+            return await docsService.archiveDocs(id);
         } catch (err) {
             const msg =
                 (err.response &&
@@ -154,6 +160,15 @@ export const docsSlice = createSlice({
             state.isSuccess = false;
             state.type = "";
             state.message = "";
+        },
+        setDocument: (state, action) => {
+            state.document = action.payload;
+        },
+        clear: (state) => {
+            state.documents = [];
+            state.document = null;
+            state.file = null;
+            state.type = "";
         },
     },
     extraReducers: (builder) => {
@@ -198,6 +213,8 @@ export const docsSlice = createSlice({
                 state.isLoading = false;
                 state.isSuccess = true;
                 state.document = action.payload;
+                state.documents = [action.payload, ...state.documents];
+                state.message = "Document upload successful";
                 state.type = action.type;
             })
             .addCase(saveDocs.rejected, (state, action) => {
@@ -222,22 +239,6 @@ export const docsSlice = createSlice({
                 state.type = action.type;
                 state.message = action.payload;
             })
-            .addCase(saveFile.pending, (state, action) => {
-                state.isLoading = true;
-                state.type = action.type;
-            })
-            .addCase(saveFile.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.isSuccess = true;
-                state.file = action.payload;
-                state.type = action.type;
-            })
-            .addCase(saveFile.rejected, (state, action) => {
-                state.isLoading = false;
-                state.isError = true;
-                state.type = action.type;
-                state.message = action.payload;
-            })
             .addCase(updateFile.pending, (state, action) => {
                 state.isLoading = true;
                 state.type = action.type;
@@ -254,6 +255,27 @@ export const docsSlice = createSlice({
                 state.type = action.type;
                 state.message = action.payload;
             })
+            .addCase(archiveDocs.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(archiveDocs.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                const ind = state.documents.findIndex(
+                    (val) => val.id === action.payload.id
+                );
+                state.documents.splice(ind, 1);
+                state.documents = [...state.documents];
+                state.message = "Document archived successful";
+                state.type = action.type;
+            })
+            .addCase(archiveDocs.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
             .addCase(deleteDocs.pending, (state, action) => {
                 state.isLoading = true;
                 state.type = action.type;
@@ -261,7 +283,12 @@ export const docsSlice = createSlice({
             .addCase(deleteDocs.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.message = action.payload;
+                const ind = state.documents.findIndex(
+                    (val) => val.id === action.payload.id
+                );
+                state.documents.splice(ind, 1);
+                state.documents = [...state.documents];
+                state.message = "Document deleted successful";
                 state.type = action.type;
             })
             .addCase(deleteDocs.rejected, (state, action) => {
@@ -273,5 +300,5 @@ export const docsSlice = createSlice({
     },
 });
 
-export const { reset } = docsSlice.actions;
+export const { reset, setDocument, clear } = docsSlice.actions;
 export default docsSlice.reducer;

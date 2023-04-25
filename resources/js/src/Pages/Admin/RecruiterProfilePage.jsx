@@ -53,10 +53,10 @@ const RecruiterProfilePage = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Profile View</h3>
+                            <h3 className="page-title">Recruiter</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item">
-                                    <Link href="/dashboard">Dashboard</Link>
+                                    <Link to="/dashboard">Dashboard</Link>
                                 </li>
                                 <li className="breadcrumb-item active">
                                     Recruiter

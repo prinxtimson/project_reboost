@@ -73,28 +73,40 @@ class DocumentApiController extends BaseApiController {
         $user = auth('api')->user();
         $fs = FileStorage::findOrFail($id);
 
-        $this->deleteFile($fs->tag, $fs->link);
         $fs->delete();
+        $this->deleteFile($fs->tag, $fs->link);
 
         $user->notify(new  DocDeleted($fs));
 
         return response()->json($fs);
     }
 
+    public function archiveDocument($id) {
+        $fs = Documents::findOrFail($id);
+
+        $fs->delete();
+        
+        return response()->json($fs);
+    }
+
     public function deleteDocument($id) {
         $user = auth('api')->user();
         $fs = Documents::findOrFail($id);
+        $file = FileStorage::findOrFail($fs->fileId);
 
-        $this->deleteFile($fs->file->tag, $fs->file->link);
-        $fs->delete();
+        $fs->forceDelete();
+        $file->delete();
 
-        $user->notify(new  DocDeleted($fs));
+        $this->deleteFile($fs->tag, $fs->link);
+
+        $doc = $fs->toArray();
+        $user->notify(new  DocDeleted($doc));
         
-        return response()->json([]);
+        return response()->json($fs);
     }
 
     public function getMyDocuments() {
-        return response()->json(Documents::where('editor', auth('api')->id())->get());
+        return response()->json(Documents::where('editor', auth('api')->id())->orderBy('id', 'DESC')->get());
     }
 
     public function getUserDocuments($id) {

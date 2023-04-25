@@ -68,6 +68,22 @@ const searchRecruiters = async (query) => {
     return res.data;
 };
 
+const filterRecruiters = async (args) => {
+    const res = await axios.get(
+        `${API_URL}/recruiter/filter/${args.filter}/${args.option}`
+    );
+
+    return res.data;
+};
+
+const filterCandidates = async (args) => {
+    const res = await axios.get(
+        `${API_URL}/candidate/filter/${args.filter}/${args.option}`
+    );
+
+    return res.data;
+};
+
 const getNextPage = async (url) => {
     const res = await axios.get(url);
 
@@ -159,6 +175,8 @@ const userService = {
     searchAdmins,
     searchCandidates,
     searchRecruiters,
+    filterCandidates,
+    filterRecruiters,
     editUser,
     updateUser,
     changePassword,

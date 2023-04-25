@@ -12,11 +12,15 @@ import {
     searchCandidates,
     searchAdmins,
     searchRecruiters,
+    filterCandidates,
+    filterRecruiters,
 } from "../../features/user/userSlice";
 import moment from "moment";
 
 const UsersPage = () => {
     const [searchText, setSearchText] = useState("");
+    const [filter, setFilter] = useState("");
+    const [option, setOption] = useState("");
     const [gridToggle, setGridToggle] = useState(true);
     const [data, setData] = useState({
         orderBy: "created_at",
@@ -75,6 +79,30 @@ const UsersPage = () => {
         setSearchText("");
     };
 
+    const handleFilterClick = () => {
+        if (path === "candidate") {
+            dispatch(filterCandidates({ filter, option }));
+        } else if (path === "recruiter") {
+            dispatch(filterRecruiters({ filter, option }));
+        } else {
+            dispatch(getUsers());
+        }
+    };
+
+    const handleClearFilterClick = () => {
+        if (path === "admin") {
+            dispatch(getAdmins());
+        } else if (path === "candidate") {
+            dispatch(getCandidates());
+        } else if (path === "recruiter") {
+            dispatch(getRecruiters());
+        } else {
+            dispatch(getUsers());
+        }
+        setFilter("");
+        setOption("");
+    };
+
     const handleSortClick = () => {
         if (path === "admin") {
             dispatch(getAdmins(data));
@@ -95,7 +123,6 @@ const UsersPage = () => {
                     <div className="row align-items-center">
                         <div className="col">
                             <h3 className="page-title">
-                                Platform{" "}
                                 {path.charAt(0).toUpperCase() + path.slice(1)}
                             </h3>
                             <ul className="breadcrumb">
@@ -141,8 +168,8 @@ const UsersPage = () => {
 
                 <div className="animated fadeIn">
                     {/* <!-- Search Filter --> */}
-                    <div className="row">
-                        <div className="col-12 col-md-6">
+                    <div className="row mx-2 bg-white mb-3">
+                        <div className="col-12 col-md-6 py-3">
                             <div className="row">
                                 <div className="col-sm-6 ">
                                     <div className="">
@@ -150,6 +177,7 @@ const UsersPage = () => {
                                             type="text"
                                             className="form-control"
                                             placeholder="Search users"
+                                            value={searchText}
                                             onChange={(e) =>
                                                 setSearchText(e.target.value)
                                             }
@@ -158,10 +186,10 @@ const UsersPage = () => {
                                 </div>
 
                                 <div className="col-sm-6 ">
-                                    <div className=" d-flex mb-2 ">
+                                    <div className=" d-flex">
                                         <button
                                             onClick={handleSearchClcik}
-                                            className="btn btn-success me-2"
+                                            className="btn btn-primary me-2"
                                         >
                                             Search
                                         </button>
@@ -175,10 +203,10 @@ const UsersPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12 col-md-6">
+                        <div className="col-12 col-md-6 py-3">
                             <div className="">
                                 <form className="row g-1">
-                                    <div className="form-group form-focus col-4">
+                                    <div className=" col-4">
                                         <select
                                             className="form-select "
                                             id="orderBy"
@@ -200,7 +228,7 @@ const UsersPage = () => {
                                             </option>
                                         </select>
                                     </div>
-                                    <div className="form-group form-focus col-4">
+                                    <div className="col-4">
                                         <select
                                             className="form-select floating"
                                             id="sortBy"
@@ -223,11 +251,11 @@ const UsersPage = () => {
                                         </select>
                                     </div>
 
-                                    <div className="col-3">
+                                    <div className="col-4">
                                         <button
                                             type="button"
                                             onClick={handleSortClick}
-                                            className="btn btn-primary"
+                                            className="btn btn-primary w-100"
                                         >
                                             Sort
                                         </button>
@@ -236,6 +264,100 @@ const UsersPage = () => {
                             </div>
                         </div>
                     </div>
+                    {path == "admin" ? null : (
+                        <div className="row mx-2 mb-3 bg-white">
+                            <div className="col-4 py-3">
+                                <div className=" w-100">
+                                    <select
+                                        className="form-select floating"
+                                        id="filterBy"
+                                        value={filter}
+                                        aria-label="filter by select"
+                                        placeholder="Filter By"
+                                        onChange={(e) =>
+                                            setFilter(e.target.value)
+                                        }
+                                    >
+                                        <option value="">Select filter</option>
+                                        {path == "recruiter" &&
+                                            recruiterOptions.map((item) => (
+                                                <option
+                                                    value={item.value}
+                                                    key={item.name}
+                                                >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                        {path == "candidate" &&
+                                            candidateOptions.map((item) => (
+                                                <option
+                                                    value={item.value}
+                                                    key={item.name}
+                                                >
+                                                    {item.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-4 py-3">
+                                <div className=" w-100">
+                                    <select
+                                        className="form-select floating"
+                                        id="filterOption"
+                                        value={option}
+                                        aria-label=" select"
+                                        placeholder="Select Option"
+                                        onChange={(e) =>
+                                            setOption(e.target.value)
+                                        }
+                                    >
+                                        <option value="">Select option</option>
+                                        {filter == "industry" &&
+                                            INDUSTRYOPTIONS.map((item) => (
+                                                <option value={item} key={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        {filter == "location" &&
+                                            LOCATIONOPTIONS.map((item) => (
+                                                <option value={item} key={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        {filter == "skills" &&
+                                            SKILLSOPRIONS.map((item) => (
+                                                <option value={item} key={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        {filter == "title" &&
+                                            ROLEOPTIONS.map((item) => (
+                                                <option value={item} key={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-4 py-3 d-flex">
+                                <button
+                                    type="button"
+                                    onClick={handleFilterClick}
+                                    className="btn btn-primary w-100"
+                                >
+                                    Filter
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleClearFilterClick}
+                                    className="btn btn-secondary w-100 mx-2"
+                                >
+                                    Clear Filter
+                                </button>
+                            </div>
+                        </div>
+                    )}
                     {/* <!-- Search Filter --> */}
 
                     {gridToggle ? (
@@ -349,7 +471,11 @@ const UsersPage = () => {
                                                                             : item.name}
                                                                     </Link>
                                                                 </h4>
-                                                                <div className="small text-muted">
+                                                                <small>
+                                                                    {item.location ||
+                                                                        ""}
+                                                                </small>
+                                                                <div className="mt-2 small text-muted">
                                                                     {item.role}
                                                                 </div>
                                                             </div>
@@ -466,7 +592,11 @@ const UsersPage = () => {
                                                                             : item.name}
                                                                     </Link>
                                                                 </h4>
-                                                                <div className="small text-muted">
+                                                                <small>
+                                                                    {item.location ||
+                                                                        ""}
+                                                                </small>
+                                                                <div className="mt-2 small text-muted">
                                                                     {item.role}
                                                                 </div>
                                                             </div>
@@ -573,7 +703,10 @@ const UsersPage = () => {
                                                             {item.name}
                                                         </Link>
                                                     </h4>
-                                                    <div className="small text-muted">
+                                                    <small>
+                                                        {item.location || ""}
+                                                    </small>
+                                                    <div className="mt-2 small text-muted">
                                                         {item.role}
                                                     </div>
                                                 </div>
@@ -592,7 +725,7 @@ const UsersPage = () => {
                                         </h3>
                                         <div className="card">
                                             <div className="card-body table-responsive">
-                                                <table class="table table-hover">
+                                                <table className="table table-hover">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">
@@ -740,7 +873,7 @@ const UsersPage = () => {
                                         </h3>
                                         <div className="card">
                                             <div className="card-body table-responsive">
-                                                <table class="table table-hover">
+                                                <table className="table table-hover">
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">
@@ -885,7 +1018,7 @@ const UsersPage = () => {
                             ) : (
                                 <div className="card">
                                     <div className="card-body table-responsive">
-                                        <table class="table table-hover">
+                                        <table className="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">ID</th>
@@ -1062,4 +1195,63 @@ const OPTIONS = [
         name: "",
         value: "",
     },
+];
+
+const recruiterOptions = [
+    {
+        value: "location",
+        name: "Location",
+    },
+    {
+        name: "Industry",
+        value: "industry",
+    },
+];
+
+const candidateOptions = [
+    {
+        value: "location",
+        name: "Location",
+    },
+    {
+        name: "Role",
+        value: "title",
+    },
+    {
+        name: "Skills",
+        value: "skills",
+    },
+];
+
+const INDUSTRYOPTIONS = [
+    "Advertising, Arts & Media",
+    "Administration & Office Support",
+    "Accounting",
+    "Information & Communication Technology",
+    "Science & Technology",
+    "Banking & Financial Services",
+];
+
+const LOCATIONOPTIONS = ["London", "Nigeria"];
+
+const ROLEOPTIONS = ["Business Analyst", "Project Management"];
+
+const SKILLSOPRIONS = [
+    "Decision making",
+    "Prioritization",
+    "Organisation",
+    "Problem solving",
+    "Communication",
+    "Critical thinking",
+    "Presentation skills",
+    "Business analysis",
+    "Agile working",
+    "Business process improvement",
+    "Stake holder relationship management",
+    "Leadership",
+    "Coaching",
+    "Collaboration",
+    "Conflict resolution",
+    "Time management",
+    "Team building",
 ];

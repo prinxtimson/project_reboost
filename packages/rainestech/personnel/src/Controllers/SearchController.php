@@ -16,6 +16,7 @@ use Rainestech\Personnel\Requests\SearchRequest;
 use Rainestech\Personnel\Requests\ShortListRequest;
 use Rainestech\Personnel\Requests\SnippetRequest;
 use Illuminate\Support\Facades\Notification;
+use Rainestech\Personnel\Entity\Tasks;
 use Ramsey\Uuid\Uuid;
 
 class SearchController extends BaseApiController
@@ -104,7 +105,13 @@ class SearchController extends BaseApiController
         if (strtolower($request->input('action')) == 'add'){
             if (!$profile->candidates()->find($request->input('id'))) {
                 $profile->candidates()->attach($request->input('id'));
+
                 $user->notify(new Shortlisted($profile));
+
+                Tasks::create([
+                    'title' => 'Candidate Shortlisted',
+                    'description' => $candidate->name . ' had been shortlisted by ' . $profile->companyName,
+                ]);
             }
         }else {
             $profile->candidates()->detach($request->input('id'));

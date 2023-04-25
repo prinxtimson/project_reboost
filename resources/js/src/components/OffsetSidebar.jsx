@@ -109,7 +109,7 @@ const OffsetSidebar = () => {
                         </li>
                         <li className="nav-item">
                             <Link
-                                to="#"
+                                to="/dashboard/task-manager"
                                 className={`w-100 nav-link fw-bold ${
                                     window.location.pathname ===
                                     "/dashboard/task-manager"
@@ -123,7 +123,7 @@ const OffsetSidebar = () => {
                         </li>
                         <li className="nav-item">
                             <Link
-                                to="#"
+                                to="/dashboard/documents"
                                 className={`w-100 nav-link fw-bold ${
                                     routeName === "/dashboard/documents"
                                         ? "active-tab"

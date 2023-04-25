@@ -38,6 +38,12 @@ const updateFile = async (data) => {
     return res.data;
 };
 
+const archiveDocs = async (id) => {
+    const res = await axios.delete(`${API_URL}/archive/${id}`);
+
+    return res.data;
+};
+
 const deleteDocs = async (id) => {
     const res = await axios.delete(`${API_URL}/remove/${id}`);
 
@@ -51,6 +57,7 @@ const docsService = {
     updateDocs,
     saveFile,
     updateFile,
+    archiveDocs,
     deleteDocs,
 };
 

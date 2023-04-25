@@ -25,6 +25,11 @@ import GuestRoute from "./utils/GuestRoute";
 import AuthRoute from "./utils/AuthRoute";
 import RecruiterProfilePage from "./Pages/Admin/RecruiterProfilePage";
 import CandidateProfilePage from "./Pages/Admin/CandidateProfilePage";
+import TaskManagerPage from "./Pages/Admin/TaskManagerPage";
+import TaskPage from "./Pages/Admin/TaskPage";
+import UserTaskPage from "./Pages/Admin/UserTaskPage";
+import DocumentsPage from "./Pages/Admin/DocumentsPage";
+import SingleDocumentPage from "./Pages/Admin/SingleDocumentPage";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -85,6 +90,46 @@ const App = () => {
                             element={
                                 <AuthRoute>
                                     <AddUserPage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="documents"
+                            element={
+                                <AuthRoute>
+                                    <DocumentsPage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="documents/:id"
+                            element={
+                                <AuthRoute>
+                                    <SingleDocumentPage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="task-manager"
+                            element={
+                                <AuthRoute>
+                                    <TaskManagerPage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="task-manager/view/:id"
+                            element={
+                                <AuthRoute>
+                                    <TaskPage />
+                                </AuthRoute>
+                            }
+                        />
+                        <Route
+                            path="task-manager/my-tasks"
+                            element={
+                                <AuthRoute>
+                                    <UserTaskPage />
                                 </AuthRoute>
                             }
                         />

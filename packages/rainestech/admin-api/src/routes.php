@@ -48,9 +48,11 @@ Route::group(['middleware' => 'admin.api'], function () {
 
     Route::get('/users/candidate', [UserApiController::class, 'getCandidates'])->name('users.candidate');
     Route::get('/users/candidate/search', [UserApiController::class, 'searchCandidates'])->name('users.candidate.search');
+    Route::get('/users/candidate/filter/{filterBy}/{value}', [UserApiController::class, 'filterCandidates'])->name('users.candidate.filter');
 
     Route::get('/users/recruiter', [UserApiController::class, 'getRecruiters'])->name('users.recruiter');
     Route::get('/users/recruiter/search', [UserApiController::class, 'searchRecruiters'])->name('users.recruiter.search');
+    Route::get('/users/recruiter/filter/{filterBy}/{value}', [UserApiController::class, 'filterRecruiters'])->name('users.recruiter.filter');
 
     Route::get('/users/s/{username}/{type}', [UserApiController::class, 'search'])->name('users.search');
     Route::get('/users/me', [UserApiController::class, 'me'])->name('users.me');
@@ -103,6 +105,7 @@ Route::group(['middleware' => 'admin.api'], function () {
         Route::get('/uid/{id}', [DocumentApiController::class, 'getUserDocuments'])->name('documents.user.get');
         Route::post('/', [DocumentApiController::class, 'saveDoc'])->name('doc.save');
         Route::put('/', [DocumentApiController::class, 'editDoc'])->name('doc.edit');
+        Route::delete('/archive/{id}', [DocumentApiController::class, 'archiveDocument'])->name('doc.archive');
         Route::delete('/remove/{id}', [DocumentApiController::class, 'deleteDocument'])->name('doc.delete');
     });
 

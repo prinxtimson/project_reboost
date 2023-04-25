@@ -95,6 +95,24 @@ class UserApiController extends BaseApiController {
         return response()->json($users, 200);
     }
 
+    public function filterCandidates($filterBy, $value)
+    {
+        if($filterBy == 'location'){
+        $users = Users::whereHas(
+            'roles', function($q){
+                $q->where('role', 'CANDIDATE');
+            })->whereHas('candidate')->where($filterBy, $value)->get();
+        }else {
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'CANDIDATE');
+                })->whereHas('candidate', function($q)use($filterBy, $value){
+                    $q->where($filterBy, $value);
+                })->get();
+        }
+        return response()->json($users, 200);
+    }
+
     public function getRecruiters(Request $request)
     {
         $orderBy = $request->get('order_by');
@@ -124,6 +142,25 @@ class UserApiController extends BaseApiController {
             'roles', function($q){
                 $q->where('role', 'RECRUITER');
             })->whereHas('recruiter')->where('firstName', 'like', '%'.$query.'%')->orWhere('lastName', 'like', '%'.$query.'%')->orWhere('email', 'like', '%'.$query.'%')->orWhere('otherName', 'like', '%'.$query.'%')->orWhere('location', 'like', '%'.$query.'%')->orWhere('companyName', 'like', '%'.$query.'%')->get();
+
+        return response()->json($users, 200);
+    }
+
+    public function filterRecruiters($filterBy, $value)
+    {
+        if($filterBy == 'location'){
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'RECRUITER');
+                })->whereHas('recruiter')->where($filterBy, $value)->get();
+        }else {
+            $users = Users::whereHas(
+                'roles', function($q){
+                    $q->where('role', 'RECRUITER');
+                })->whereHas('recruiter', function($q)use($filterBy, $value){
+                    $q->where($filterBy, $value);
+                })->get();
+        }
 
         return response()->json($users, 200);
     }

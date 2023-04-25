@@ -1,10 +1,12 @@
 <?php
 
+use Rainestech\Personnel\Controllers\ActivityController;
 use Rainestech\Personnel\Controllers\ChatController;
 use Rainestech\Personnel\Controllers\NotificationController;
 use Rainestech\Personnel\Controllers\ProfileController;
 use Rainestech\Personnel\Controllers\RequestController;
 use Rainestech\Personnel\Controllers\SearchController;
+use Rainestech\Personnel\Controllers\TaskController;
 
 Route::group(['middleware' => 'admin.api', 'prefix' => 'profile'], function () {
     Route::get('/skillset', [ProfileController::class, 'getSkillSets'])->name('skillset.index');
@@ -74,4 +76,19 @@ Route::group(['middleware' => 'admin.api', 'prefix' => 'notification'], function
     Route::get('/', [NotificationController::class, 'get'])->name('notification.index');
     Route::post('/view', [NotificationController::class, 'profileView'])->name('notification.view');
     Route::get('/mark', [NotificationController::class, 'mark'])->name('notification.mark');
+});
+
+Route::group(['middleware' => 'admin.api', 'prefix' => 'tasks'], function () {
+    Route::get('/all', [TaskController::class, 'index'])->name('task.index');
+    Route::get('/', [TaskController::class, 'myTasks'])->name('task.my');
+    Route::get('/show/{id}', [TaskController::class, 'show'])->name('task.show');
+    Route::get('assign/{id}/{userID}', [TaskController::class, 'assignTask'])->name('task.assign');
+    Route::get('mark/{id}', [TaskController::class, 'markComplete'])->name('task.complete');
+    Route::put('{id}', [TaskController::class, 'update'])->name('task.update');
+    Route::delete('{id}', [TaskController::class, 'archiveTask'])->name('task.archive');
+});
+
+Route::group(['middleware' => 'admin.api', 'prefix' => 'activities'], function () {
+    Route::get('/all', [ActivityController::class, 'index'])->name('task.index');
+    Route::get('/', [ActivityController::class, 'myActivities'])->name('task.my');
 });

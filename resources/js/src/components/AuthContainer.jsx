@@ -17,7 +17,7 @@ const AuthContainer = ({ children }) => {
         <div className="flex-grow-1 d-flex flex-column">
             <OffsetSidebar />
             <nav className="container-fluid navbar navbar-light bg-white">
-                <div className="container-fluid d-flex justify-content-center">
+                <div className="container-md flex-grow-1 d-flex justify-content-center align-items-center">
                     <div className="">
                         <button
                             className="navbar-toggler mx-2 d-block d-lg-none text-dark"
@@ -354,7 +354,7 @@ const AuthContainer = ({ children }) => {
                             </li>
                             <li className="nav-item">
                                 <Link
-                                    to="#"
+                                    to="/dashboard/task-manager"
                                     className={`w-100 nav-link fw-bold ${
                                         window.location.pathname ===
                                         "/dashboard/task-manager"
@@ -368,7 +368,7 @@ const AuthContainer = ({ children }) => {
                             </li>
                             <li className="nav-item">
                                 <Link
-                                    to="#"
+                                    to="/dashboard/documents"
                                     className={`w-100 nav-link fw-bold ${
                                         routeName === "/dashboard/documents"
                                             ? "active-tab"

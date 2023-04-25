@@ -16,6 +16,7 @@ use Rainestech\AdminApi\Requests\RegistrationRequest;
 use Rainestech\AdminApi\Requests\UsersRequest;
 use Rainestech\Personnel\Entity\Candidates;
 use Rainestech\Personnel\Entity\Recruiters;
+use Rainestech\Personnel\Entity\Tasks;
 
 trait Register {
 
@@ -44,6 +45,10 @@ trait Register {
                 $recruiters = new Recruiters($request->except(['logo', 'username', 'password']));
                 $recruiters->userId = $user->id;
                 $recruiters->save();
+                Tasks::create([
+                    'title' => 'Recruiter Approval',
+                    'description' => $recruiters->companyName . ' is awaiting approval',
+                ]);
             }
         }
 
