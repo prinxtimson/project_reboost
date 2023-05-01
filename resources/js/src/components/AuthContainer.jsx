@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import OffsetSidebar from "./OffsetSidebar";
 import { logout } from "../features/auth/authSlice";
 import moment from "moment";
+import { markNotification } from "../features/notification/notificationSlice";
 
 const AuthContainer = ({ children }) => {
     const { routeName } = useParams();
@@ -13,11 +14,15 @@ const AuthContainer = ({ children }) => {
         useSelector((state) => state.notification);
     const { user } = useSelector((state) => state.auth);
 
+    const handleNotificationClick = () => {
+        setTimeout(() => dispatch(markNotification()), 2000);
+    };
+
     return (
         <div className="flex-grow-1 d-flex flex-column">
             <OffsetSidebar />
             <nav className="container-fluid navbar navbar-light bg-white">
-                <div className="container-md flex-grow-1 d-flex justify-content-center align-items-center">
+                <div className="container-lg flex-grow-1 d-flex justify-content-center align-items-center">
                     <div className="">
                         <button
                             className="navbar-toggler mx-2 d-block d-lg-none text-dark"
@@ -40,7 +45,7 @@ const AuthContainer = ({ children }) => {
                     </div>
                     <div className="flex-grow-1">
                         <ul className="nav justify-content-end align-items-center">
-                            <li className="nav-item dropdown">
+                            <li className="nav-item dropdown mr-2">
                                 <a
                                     className=""
                                     href="#"
@@ -48,6 +53,7 @@ const AuthContainer = ({ children }) => {
                                     role="button"
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
+                                    onClick={handleNotificationClick}
                                 >
                                     <span
                                         style={{
@@ -61,20 +67,33 @@ const AuthContainer = ({ children }) => {
                                         >
                                             {" "}
                                         </i>
+                                        {notifications?.count &&
+                                        notifications?.count > 0 ? (
+                                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                {notifications?.count}
+                                                <span className="visually-hidden">
+                                                    unread messages
+                                                </span>
+                                            </span>
+                                        ) : null}
                                     </span>
                                 </a>
 
                                 <ul
-                                    style={{ minWidth: 350 }}
-                                    className="dropdown-menu dropdown-menu-end"
+                                    style={{ minWidth: 350, maxHeight: 450 }}
+                                    className="dropdown-menu dropdown-menu-end overflow-auto"
                                     aria-labelledby="notificationDropdown"
                                 >
-                                    {notifications &&
-                                    notifications?.count > 0 ? (
+                                    {notifications && notifications.data ? (
                                         notifications.data.map((item) => (
                                             <li key={item.id}>
                                                 <Link
-                                                    to="#"
+                                                    to={
+                                                        item.type ==
+                                                        "App\\Notifications\\NewTask"
+                                                            ? "/dashboard/task-manager"
+                                                            : "#"
+                                                    }
                                                     className="dropdown-item d-flex"
                                                 >
                                                     {item.type ==
@@ -163,6 +182,17 @@ const AuthContainer = ({ children }) => {
                                                             document had been
                                                             uploaded
                                                         </div>
+                                                    ) : item.type ==
+                                                      "App\\Notifications\\NewTask" ? (
+                                                        <div
+                                                            className={
+                                                                item.read_at
+                                                                    ? "w-100"
+                                                                    : "font-weight-bold w-100"
+                                                            }
+                                                        >
+                                                            New task available
+                                                        </div>
                                                     ) : (
                                                         <div
                                                             className={
@@ -211,7 +241,7 @@ const AuthContainer = ({ children }) => {
                                 <a
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
-                                    className=" dropdown-toggle avatar"
+                                    className=" avatar"
                                     id="avatarDropdown"
                                     href="#"
                                     role="button"
@@ -327,7 +357,7 @@ const AuthContainer = ({ children }) => {
                                     <ul className="nav nav-pills flex-column mb-auto">
                                         <li className="ps-3">
                                             <Link
-                                                to="/dashboard/users/admin"
+                                                to="/dashboard/admin"
                                                 className="nav-link text-white"
                                             >
                                                 Admin
@@ -335,7 +365,7 @@ const AuthContainer = ({ children }) => {
                                         </li>
                                         <li className="ps-3">
                                             <Link
-                                                to="/dashboard/users/candidate"
+                                                to="/dashboard/candidates"
                                                 className="nav-link text-white"
                                             >
                                                 Candidates
@@ -343,7 +373,7 @@ const AuthContainer = ({ children }) => {
                                         </li>
                                         <li className="ps-3">
                                             <Link
-                                                to="/dashboard/users/recruiter"
+                                                to="/dashboard/recruiters"
                                                 className="nav-link text-white"
                                             >
                                                 Recruiters

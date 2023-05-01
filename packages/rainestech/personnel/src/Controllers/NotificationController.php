@@ -44,7 +44,7 @@ class NotificationController extends BaseApiController {
 
       $response = [
           'data' => $user->notifications,
-          'count' => $user->unreadNotifications->count(),
+          'count' => 0,
       ];
 
       return response()->json($response);

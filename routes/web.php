@@ -46,6 +46,12 @@ Route::group([ "prefix" => "dashboard"], function () {
         Route::get("edit", function () {
             return view('welcome');
         });
+        Route::get('change-profile-picture', function () {
+            return view('welcome');
+        });
+        Route::get('change-password', function () {
+            return view('welcome');
+        });
     });
 
     Route::get("documents", function () {
@@ -53,10 +59,6 @@ Route::group([ "prefix" => "dashboard"], function () {
     });
 
     Route::get("documents/{id}", function () {
-        return view('welcome');
-    });
-
-    Route::get("add-user", function () {
         return view('welcome');
     });
 
@@ -72,18 +74,34 @@ Route::group([ "prefix" => "dashboard"], function () {
         return view('welcome');
     });
 
-    Route::get('change-password', function () {
+    Route::get("admin", function () {
         return view('welcome');
     });
 
-    Route::group(["prefix" => 'users'], function () {
-        Route::get("{path}", function () {
+    Route::get("admin/add", function () {
+        return view('welcome');
+    });
+
+    Route::group(["prefix" => 'candidates'], function () {
+        Route::get("", function () {
             return view('welcome');
         });
-        Route::get("recruiter/{id}", function () {
+        Route::get("add", function () {
             return view('welcome');
         });
-        Route::get("candidate/{id}", function () {
+        Route::get("view/{id}", function () {
+            return view('welcome');
+        });
+    });
+
+    Route::group(["prefix" => 'recruiters'], function () {
+        Route::get("", function () {
+            return view('welcome');
+        });
+        Route::get("add", function () {
+            return view('welcome');
+        });
+        Route::get("view/{id}", function () {
             return view('welcome');
         });
     });

@@ -117,6 +117,11 @@ export const fileSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.file = null;
+            state.files = null;
+            state.passport = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -203,5 +208,5 @@ export const fileSlice = createSlice({
     },
 });
 
-export const { reset } = fileSlice.actions;
+export const { reset, clear } = fileSlice.actions;
 export default fileSlice.reducer;

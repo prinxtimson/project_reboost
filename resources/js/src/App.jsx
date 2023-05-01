@@ -30,6 +30,11 @@ import TaskPage from "./Pages/Admin/TaskPage";
 import UserTaskPage from "./Pages/Admin/UserTaskPage";
 import DocumentsPage from "./Pages/Admin/DocumentsPage";
 import SingleDocumentPage from "./Pages/Admin/SingleDocumentPage";
+import RecruiterUsersPage from "./Pages/Admin/RecruiterUsersPage";
+import CandidateUsersPage from "./Pages/Admin/CandidateUsersPage";
+import ChangeProfilePicturePage from "./Pages/Admin/ChangeProfilePicturePage";
+import AddRecruiterPage from "./Pages/Admin/AddRecruiterPage";
+import AddCandidatePage from "./Pages/Admin/AddCandidatePage";
 
 const App = () => {
     const dispatch = useDispatch();
@@ -82,14 +87,6 @@ const App = () => {
                             element={
                                 <AuthRoute>
                                     <AdminPage />
-                                </AuthRoute>
-                            }
-                        />
-                        <Route
-                            path="add-user"
-                            element={
-                                <AuthRoute>
-                                    <AddUserPage />
                                 </AuthRoute>
                             }
                         />
@@ -150,40 +147,93 @@ const App = () => {
                                     </AuthRoute>
                                 }
                             />
+                            <Route
+                                path="change-profile-picture"
+                                element={
+                                    <AuthRoute>
+                                        <ChangeProfilePicturePage />
+                                    </AuthRoute>
+                                }
+                            />
+                            <Route
+                                path="change-password"
+                                element={
+                                    <AuthRoute>
+                                        <ChangePasswordPage />
+                                    </AuthRoute>
+                                }
+                            />
                         </Route>
                         <Route
-                            path="users/:path"
+                            path="admin"
                             element={
                                 <AuthRoute>
                                     <UsersPage />
                                 </AuthRoute>
                             }
                         />
+
                         <Route
-                            path="users/recruiter/:id"
+                            path="admin/add"
                             element={
                                 <AuthRoute>
-                                    <RecruiterProfilePage />
-                                </AuthRoute>
-                            }
-                        />
-                        <Route
-                            path="users/candidate/:id"
-                            element={
-                                <AuthRoute>
-                                    <CandidateProfilePage />
+                                    <AddUserPage />
                                 </AuthRoute>
                             }
                         />
 
-                        <Route
-                            path="change-password"
-                            element={
-                                <AuthRoute>
-                                    <ChangePasswordPage />
-                                </AuthRoute>
-                            }
-                        />
+                        <Route path="recruiters">
+                            <Route
+                                path=""
+                                element={
+                                    <AuthRoute>
+                                        <RecruiterUsersPage />
+                                    </AuthRoute>
+                                }
+                            />
+                            <Route
+                                path="add"
+                                element={
+                                    <AuthRoute>
+                                        <AddRecruiterPage />
+                                    </AuthRoute>
+                                }
+                            />
+                            <Route
+                                path="view/:id"
+                                element={
+                                    <AuthRoute>
+                                        <RecruiterProfilePage />
+                                    </AuthRoute>
+                                }
+                            />
+                        </Route>
+                        <Route path="candidates">
+                            <Route
+                                path=""
+                                element={
+                                    <AuthRoute>
+                                        <CandidateUsersPage />
+                                    </AuthRoute>
+                                }
+                            />
+                            <Route
+                                path="add"
+                                element={
+                                    <AuthRoute>
+                                        <AddCandidatePage />
+                                    </AuthRoute>
+                                }
+                            />
+                            <Route
+                                path="view/:id"
+                                element={
+                                    <AuthRoute>
+                                        <CandidateProfilePage />
+                                    </AuthRoute>
+                                }
+                            />
+                        </Route>
                     </Route>
                     <Route
                         path="/password/forgot"

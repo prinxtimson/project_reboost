@@ -97,6 +97,10 @@ export const profileSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.profile = null;
+            state.skills = [];
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -167,5 +171,5 @@ export const profileSlice = createSlice({
     },
 });
 
-export const { reset } = profileSlice.actions;
+export const { reset, clear } = profileSlice.actions;
 export default profileSlice.reducer;

@@ -31,7 +31,7 @@ class DocumentApiController extends BaseApiController {
         $doc->save();
         $doc->loadWith();
         
-        $user->notify(new  DocUploaded($doc));
+      //  $user->notify(new  DocUploaded($doc));
 
         return response()->json($doc);
     }
@@ -76,7 +76,7 @@ class DocumentApiController extends BaseApiController {
         $fs->delete();
         $this->deleteFile($fs->tag, $fs->link);
 
-        $user->notify(new  DocDeleted($fs));
+      //  $user->notify(new  DocDeleted($fs));
 
         return response()->json($fs);
     }

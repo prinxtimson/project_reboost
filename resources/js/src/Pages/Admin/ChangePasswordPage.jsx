@@ -43,6 +43,9 @@ const ChangePasswordPage = () => {
                             <li className="breadcrumb-item">
                                 <Link to="/dashboard">Dashboard</Link>
                             </li>
+                            <li className="breadcrumb-item">
+                                <Link to="/dashboard/profile">Profile</Link>
+                            </li>
                             <li className="breadcrumb-item active">
                                 Change Password
                             </li>
@@ -53,88 +56,119 @@ const ChangePasswordPage = () => {
                     <form
                         autoComplete="off"
                         onSubmit={handleOnSubmit}
-                        className="form row g-3"
+                        className="form g-3 py-3"
                     >
-                        <div className="input-group mb-3">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                    <i className="icon-lock"></i>
-                                </span>
-                            </div>
-                            <input
-                                autoComplete="old-password"
-                                className="form-control"
-                                name="oldPassword"
-                                placeholder="Current Password"
-                                onChange={handleOnChange}
-                                required
-                                type={`${oldVisible ? "text" : "password"}`}
-                            />
-                            <div className="input-group-append">
-                                <span
-                                    className="input-group-text"
-                                    onClick={() => setOldVisible(!oldVisible)}
-                                >
-                                    <i
-                                        className={`fa ${
-                                            visible ? "fa-eye-slash" : "fa-eye"
-                                        }`}
-                                    ></i>
-                                </span>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="oldPassword"
+                            >
+                                Current Password
+                            </label>
+
+                            <div className="col-sm-8 input-group">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">
+                                        <i className="icon-lock"></i>
+                                    </span>
+                                </div>
+                                <input
+                                    autoComplete="old-password"
+                                    className="form-control"
+                                    name="oldPassword"
+                                    placeholder="Current Password"
+                                    onChange={handleOnChange}
+                                    required
+                                    type={`${oldVisible ? "text" : "password"}`}
+                                />
+                                <div className="input-group-append">
+                                    <span
+                                        className="input-group-text"
+                                        onClick={() =>
+                                            setOldVisible(!oldVisible)
+                                        }
+                                    >
+                                        <i
+                                            className={`fa ${
+                                                visible
+                                                    ? "fa-eye-slash"
+                                                    : "fa-eye"
+                                            }`}
+                                        ></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div className="input-group mb-3">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                    <i className="icon-lock"></i>
-                                </span>
-                            </div>
-                            <input
-                                autoComplete="new-password"
-                                className="form-control"
-                                name="password"
-                                placeholder="New Password"
-                                onChange={handleOnChange}
-                                required
-                                type={`${visible ? "text" : "password"}`}
-                            />
-                            <div className="input-group-append">
-                                <span
-                                    className="input-group-text"
-                                    onClick={() => setVisible(!visible)}
-                                >
-                                    <i
-                                        className={`fa ${
-                                            visible ? "fa-eye-slash" : "fa-eye"
-                                        }`}
-                                    ></i>
-                                </span>
-                            </div>
-                            <div className="invalid-feedback">
-                                <small>
-                                    Password is required. Minimum password
-                                    length is 8 characters with Upper and lower
-                                    case letters
-                                </small>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="newPassword"
+                            >
+                                New Password
+                            </label>
+                            <div className="input-group col-sm-8">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">
+                                        <i className="icon-lock"></i>
+                                    </span>
+                                </div>
+                                <input
+                                    autoComplete="new-password"
+                                    className="form-control"
+                                    name="password"
+                                    placeholder="New Password"
+                                    onChange={handleOnChange}
+                                    required
+                                    type={`${visible ? "text" : "password"}`}
+                                />
+                                <div className="input-group-append">
+                                    <span
+                                        className="input-group-text"
+                                        onClick={() => setVisible(!visible)}
+                                    >
+                                        <i
+                                            className={`fa ${
+                                                visible
+                                                    ? "fa-eye-slash"
+                                                    : "fa-eye"
+                                            }`}
+                                        ></i>
+                                    </span>
+                                </div>
+                                <div className="invalid-feedback">
+                                    <small>
+                                        Password is required. Minimum password
+                                        length is 8 characters with Upper and
+                                        lower case letters
+                                    </small>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="input-group mb-3">
-                            <div className="input-group-prepend">
-                                <span className="input-group-text">
-                                    <i className="icon-lock"></i>
-                                </span>
-                            </div>
-                            <input
-                                className="form-control "
-                                name="password_confirmation"
-                                placeholder="Confirm New Password"
-                                onChange={handleOnChange}
-                                required
-                                type={`${visible ? "text" : "password"}`}
-                            />
-                            <div className="invalid-feedback">
-                                <div>Password do not match</div>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="password_confirmation"
+                            >
+                                Confirm New Password
+                            </label>
+                            <div className="input-group col-sm-8">
+                                <div className="input-group-prepend">
+                                    <span className="input-group-text">
+                                        <i className="icon-lock"></i>
+                                    </span>
+                                </div>
+                                <input
+                                    className="form-control "
+                                    name="password_confirmation"
+                                    placeholder="Confirm New Password"
+                                    onChange={handleOnChange}
+                                    required
+                                    type={`${visible ? "text" : "password"}`}
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Password do not match</div>
+                                </div>
                             </div>
                         </div>
                         <div className="row">

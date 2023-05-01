@@ -17,6 +17,11 @@ const saveCandidates = async (data) => {
     return res.data;
 };
 
+const getCandidateByDate = async () => {
+    const res = await axios.get(`${API_URL}/by-date`);
+    return res.data;
+};
+
 const getCandidateByUserId = async (uid) => {
     const res = await axios.get(`${API_URL}/${uid}`);
     return res.data;
@@ -36,6 +41,7 @@ const candidateService = {
     getCandidates,
     getNextPage,
     saveCandidates,
+    getCandidateByDate,
     getCandidateByUserId,
     editCandidates,
     deleteCandidates,

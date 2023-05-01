@@ -3,12 +3,9 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContainer from "../../components/AuthContainer";
 import { toast } from "react-toastify";
-import { editMe, reset, updatePassport } from "../../features/auth/authSlice";
-import axios from "axios";
+import { editMe, reset } from "../../features/auth/authSlice";
 
 const EditProfilePage = () => {
-    const [inputRef, setInputRef] = useState(null);
-    const [file, setFile] = useState(null);
     const [avatar, setAvatar] = useState("");
     const [formData, setFormData] = useState({
         firstName: "",
@@ -49,7 +46,7 @@ const EditProfilePage = () => {
     useEffect(() => {
         setTimeout(() => dispatch(reset()), 5000);
 
-        if (isSuccess) {
+        if (isSuccess && type == "auth/edit-me/fulfilled") {
             toast.success(message, { onClose: () => dispatch(reset()) });
         }
         // return () => dispatch(reset());
@@ -57,31 +54,6 @@ const EditProfilePage = () => {
 
     const handleOnChange = (e) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    const handleFileSelect = (e) => {
-        setFile(e.target.files[0]);
-        let _data = new FormData();
-        _data.append("file", e.target.files[0]);
-        _data.append("name", e.target.files[0].name);
-        _data.append("tag", "passport");
-
-        if (user.passport) {
-            _data.append("id", user.passport.id);
-        } else {
-            _data.append("objID", user.id);
-        }
-        axios
-            .post("/api/v1/fs", _data)
-            .then((res) => {
-                console.log(res.data);
-                dispatch(updatePassport(res.data));
-                toast.success("Profile picture uploaded successfully");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        setAvatar(URL.createObjectURL(e.target.files[0]));
-    };
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
@@ -122,20 +94,10 @@ const EditProfilePage = () => {
                                     backgroundColor: "#aaa",
                                     color: "#fff",
                                 }}
-                                onClick={() => inputRef?.click()}
-                            />
-
-                            <input
-                                type="file"
-                                onChange={(e) => handleFileSelect(e)}
-                                name="avatar"
-                                id="avatar"
-                                className="d-none"
-                                accept="image/*"
-                                ref={(ref) => setInputRef(ref)}
                             />
                         </div>
                         <div className="mb-3 col-6">
+                            <label htmlFor="firstName">Firstname</label>
                             <input
                                 type="text"
                                 className="form-control "
@@ -148,6 +110,7 @@ const EditProfilePage = () => {
                             />
                         </div>
                         <div className="mb-3 col-6">
+                            <label htmlFor="surname">Surname</label>
                             <input
                                 type="text"
                                 className="form-control "
@@ -160,6 +123,7 @@ const EditProfilePage = () => {
                             />
                         </div>
                         <div className="mb-3 col-6">
+                            <label htmlFor="otherName">Othername</label>
                             <input
                                 type="text"
                                 className="form-control "
@@ -171,6 +135,7 @@ const EditProfilePage = () => {
                             />
                         </div>
                         <div className="mb-3 col-6">
+                            <label htmlFor="phoneNo">Phone Number</label>
                             <input
                                 type="text"
                                 className="form-control "
@@ -183,6 +148,7 @@ const EditProfilePage = () => {
                             />
                         </div>
                         <div className="mb-3 col-6">
+                            <label htmlFor="postCode">Post Code</label>
                             <input
                                 type="text"
                                 className="form-control "

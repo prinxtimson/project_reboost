@@ -5,6 +5,7 @@ namespace Rainestech\Personnel\Controllers;
 use App\Notifications\NotShortlisted;
 use App\Notifications\Shortlisted;
 use Carbon\Carbon;
+use DB;
 use Rainestech\AdminApi\Controllers\BaseApiController;
 use Rainestech\Personnel\Entity\Candidates;
 use Rainestech\Personnel\Entity\RecruiterCandidates;
@@ -90,6 +91,13 @@ class SearchController extends BaseApiController
             $shortList = RecruiterCandidates::with(['candidate'])->where('rid', $id)->get();
             return response()->json($shortList);
     }
+
+    public function getShortlistByDate() {
+        $shortList = RecruiterCandidates::with(['candidate'])->get();
+        return response()->json($shortList->groupBy(function ($data){
+            return Carbon::parse($data->created_at)->format('m-Y');
+        }));
+}
 
     public function getFavourite($id) {
         $favourite = RecruiterCandidates::with(['recruiter'])->where('cid', $id)->get();

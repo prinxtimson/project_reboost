@@ -8,6 +8,7 @@ import {
     rejectRecruiter,
     verifyRecruiter,
     reset,
+    clear,
 } from "../../features/recruiter/recruiterSlice";
 
 const RecruiterProfilePage = () => {
@@ -18,6 +19,10 @@ const RecruiterProfilePage = () => {
 
     useEffect(() => {
         dispatch(getRecruiterByUserId(id));
+        return () => {
+            dispatch(reset());
+            dispatch(clear());
+        };
     }, []);
 
     const { recruiter, isLoading, isError, message, isSuccess, type } =
@@ -30,11 +35,19 @@ const RecruiterProfilePage = () => {
     };
 
     useEffect(() => {
-        if (isError) {
+        if (
+            isError &&
+            (type == "recruiter/reject-recruiters/rejected" ||
+                type == "recruiter/verify-recruiters/rejected")
+        ) {
             toast.error(message, { onClose: () => dispatch(reset()) });
         }
 
-        if (isSuccess) {
+        if (
+            isSuccess &&
+            (type == "recruiter/reject-recruiters/fulfilled" ||
+                type == "recruiter/verify-recruiters/fulfilled")
+        ) {
             toast.success(message, { onClose: () => dispatch(reset()) });
         }
     }, [isLoading, isSuccess, isError]);
@@ -57,6 +70,11 @@ const RecruiterProfilePage = () => {
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item">
                                     <Link to="/dashboard">Dashboard</Link>
+                                </li>
+                                <li className="breadcrumb-item">
+                                    <Link to="/dashboard/recruiters">
+                                        Recruiters
+                                    </Link>
                                 </li>
                                 <li className="breadcrumb-item active">
                                     Recruiter

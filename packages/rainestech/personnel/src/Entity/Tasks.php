@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string|null $title
  * @property string|null $description
+ * @property string|null $data
  * @property int|null $status
  * @property int|null $assignBy
  * @property int|null $userID
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static Builder|Tasks whereId($value)
  * @method static Builder|Tasks whereTitle($value)
  * @method static Builder|Tasks whereDescription($value)
+ * @method static Builder|Tasks whereData($value)
  * @method static Builder|Tasks whereComment($value)
  * @method static Builder|Tasks whereCategory($value)
  * @method static Builder|Tasks whereStatus($value)
@@ -53,6 +55,7 @@ class Tasks extends Model {
     protected $table = 'admin_tasks';
     protected $guarded = ['id'];
     protected $dateFormat = 'Y-m-d h:m:s';
+    protected $casts = [ 'data' => 'array' ];
 
     public function user()
     {

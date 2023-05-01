@@ -74,8 +74,46 @@ const TaskManagerPage = () => {
                                 className="animated fadeIn bg-white shadow overflow-auto w-100 p-2"
                                 style={{ height: 320 }}
                             >
-                                <div className="p-3 border-bottom">
+                                <div className="p-1 border-bottom">
                                     <h5 className="fw-bold">Unassign Tasks</h5>
+                                    <div className="py-2">
+                                        <div className="row align-items-center">
+                                            <div className="col-10">
+                                                <div className="progress">
+                                                    <div
+                                                        className="progress-bar bg-danger"
+                                                        role="progressbar"
+                                                        style={{
+                                                            width: `${
+                                                                (tasks.filter(
+                                                                    (v) =>
+                                                                        !v.userID
+                                                                ).length /
+                                                                    tasks.length) *
+                                                                100
+                                                            }%`,
+                                                        }}
+                                                        aria-valuenow="25"
+                                                        aria-valuemin="0"
+                                                        aria-valuemax="100"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                            <div className="col-2">
+                                                {`${
+                                                    tasks.filter(
+                                                        (v) => v.status == 1
+                                                    ).length
+                                                }/${tasks.length}`}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="p-1 border-bottom">
+                                    <h5 className="fw-bold">
+                                        Not Started Tasks
+                                    </h5>
                                     <div className="py-2">
                                         <div className="row align-items-center">
                                             <div className="col-10">
@@ -111,7 +149,7 @@ const TaskManagerPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-3 border-bottom">
+                                <div className="p-1 border-bottom">
                                     <h5 className="fw-bold">Pending Tasks</h5>
                                     <div className="py-2">
                                         <div className="row align-items-center">
@@ -148,9 +186,9 @@ const TaskManagerPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="p-3">
+                                <div className="p-1">
                                     <h5 className="fw-bold">Completed Tasks</h5>
-                                    <div className="py-2">
+                                    <div className="py-1">
                                         <div className="row align-items-center">
                                             <div className="col-10">
                                                 <div className="progress">
@@ -197,11 +235,11 @@ const TaskManagerPage = () => {
                             >
                                 {activities.map((activity) => (
                                     <div
-                                        className="p-3 border-bottom"
+                                        className="p-1 border-bottom"
                                         key={activity.id}
                                     >
                                         <div className="d-flex align-items-center">
-                                            <div className="px-2">
+                                            <div className="px-1">
                                                 <div className="avatar">
                                                     <img
                                                         src={
@@ -263,13 +301,13 @@ const TaskManagerPage = () => {
                                     <div
                                         className={
                                             users?.data.length - 1 == ind
-                                                ? "p-3 "
-                                                : "p-3 border-bottom"
+                                                ? "p-2 "
+                                                : "p-2 border-bottom"
                                         }
                                         key={ind}
                                     >
                                         <div className="d-flex align-items-center">
-                                            <div className="px-2">
+                                            <div className="px-1">
                                                 <div className="avatar">
                                                     <img
                                                         src={
@@ -316,8 +354,8 @@ const TaskManagerPage = () => {
                         </div>
                     </div>
 
-                    <div className="row g-2">
-                        <div className="col-12 col-md-6 col-lg-4 mb-4 mb-lg-2">
+                    <div className="row g-2 mt-4">
+                        <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-2">
                             <h3 className="fw-bold text-center mb-2">
                                 Unassigned
                             </h3>
@@ -329,7 +367,7 @@ const TaskManagerPage = () => {
                                     (task) =>
                                         !task.userID && (
                                             <div
-                                                className="p-3 border border-2 bg-white my-2"
+                                                className="p-2 border border-2 bg-white my-2"
                                                 key={task.id}
                                             >
                                                 <div className="d-flex align-items-center justify-content-center">
@@ -363,7 +401,53 @@ const TaskManagerPage = () => {
                             </div>
                         </div>
 
-                        <div className="col-12 col-md-6 col-lg-4 mb-4 mb-lg-2">
+                        <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-2">
+                            <h3 className="fw-bold text-center mb-2">
+                                Not Started
+                            </h3>
+                            <div
+                                className="animated fadeIn overflow-auto w-100 p-2"
+                                style={{ height: 420 }}
+                            >
+                                {tasks.map(
+                                    (task) =>
+                                        task.status == 1 && (
+                                            <div
+                                                className="p-2 border border-2 bg-white my-2"
+                                                key={task.id}
+                                            >
+                                                <div className="d-flex align-items-center justify-content-center">
+                                                    <div className="flex-grow-1 px-1">
+                                                        <Link
+                                                            to={`/dashboard/task-manager/view/${task.id}`}
+                                                        >
+                                                            <p>{task.title}</p>
+                                                        </Link>
+                                                    </div>
+                                                    <div className="">
+                                                        <p>
+                                                            <span>Owner: </span>
+                                                            {task.userID && (
+                                                                <span>{`${task.user?.firstName
+                                                                    .toUpperCase()
+                                                                    .charAt(
+                                                                        0
+                                                                    )}${task.user?.firstName
+                                                                    .toUpperCase()
+                                                                    .charAt(
+                                                                        0
+                                                                    )}`}</span>
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-2">
                             <h3 className="fw-bold text-center mb-2">
                                 In Progress
                             </h3>
@@ -375,7 +459,7 @@ const TaskManagerPage = () => {
                                     (task) =>
                                         task.status == 2 && (
                                             <div
-                                                className="p-3 border border-2 bg-white my-2"
+                                                className="p-2 border border-2 bg-white my-2"
                                                 key={task.id}
                                             >
                                                 <div className="d-flex align-items-center justify-content-center">
@@ -409,7 +493,7 @@ const TaskManagerPage = () => {
                             </div>
                         </div>
 
-                        <div className="col-12 col-md-6 col-lg-4 mb-4 mb-lg-2">
+                        <div className="col-12 col-md-6 col-lg-3 mb-4 mb-lg-2">
                             <h3 className="fw-bold text-center mb-2">
                                 Completed
                             </h3>
@@ -421,7 +505,7 @@ const TaskManagerPage = () => {
                                     (task) =>
                                         task.status == 3 && (
                                             <div
-                                                className="p-3 border border-2 bg-white my-2"
+                                                className="p-2 border border-2 bg-white my-2"
                                                 key={task.id}
                                             >
                                                 <div className="d-flex align-items-center justify-content-center">

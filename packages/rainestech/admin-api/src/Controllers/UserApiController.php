@@ -381,26 +381,11 @@ class UserApiController extends BaseApiController {
         $user = Users::find($request->get('id'));
         $user->firstName = $request->get('firstName');
         $user->lastName = $request->get('lastName');
-
-        if($request->get('otherName')){
-            $user->otherName = $request->get('otherName');
-        }
-
-        if($request->get('postCode')){
-            $user->postCode = $request->get('postCode');
-        }
-
-        if($request->get('companyName')){
-            $user->companyName = $request->get('companyName');
-        }
-
-        if($request->get('email')){
-            $user->email = $request->get('email');
-        }
-
-        if($request->get('phoneNo')){
-            $user->phoneNo = $request->get('phoneNo');
-        }
+        $user->otherName = $request->get('otherName');
+        $user->postCode = $request->get('postCode');
+        $user->companyName = $request->get('companyName');
+        $user->phoneNo = $request->get('phoneNo');
+        $user->location = $request->get('location');
 
         if($request->get('username')){
             $user->username = $request->get('username');
@@ -412,10 +397,6 @@ class UserApiController extends BaseApiController {
 
         if (strlen($request->get('password')) > 6) {
             $user->password = Hash::make($request->get('password'));
-        }
-
-        if($request->get('location')){
-            $user->location = $request->get('location');
         }
 
         $user->save();
@@ -440,7 +421,7 @@ class UserApiController extends BaseApiController {
             }
         }
 
-        $user->notify(new ProfileUpdated($user));
+       // $user->notify(new ProfileUpdated($user));
 
         return response()->json($user);
     }

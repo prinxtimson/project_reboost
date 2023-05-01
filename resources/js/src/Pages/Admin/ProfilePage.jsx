@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import AuthContainer from "../../components/AuthContainer";
+import { logout } from "../../features/auth/authSlice";
 
 const ProfilePage = () => {
     const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const ProfilePage = () => {
                         </div>
                     </div>
                     <div className="bg-light p-4 d-flex justify-content-end text-center">
-                        <ul className="list-inline mb-0">
+                        {/* <ul className="list-inline mb-0">
                             <li className="list-inline-item">
                                 <small className="text-muted">
                                     <i className="fa fa-image mr-1"></i>
@@ -69,7 +70,7 @@ const ProfilePage = () => {
                                     ShortLists
                                 </small>
                             </li>
-                        </ul>
+                        </ul> */}
                     </div>
 
                     <div className="px-4 py-3">
@@ -78,14 +79,21 @@ const ProfilePage = () => {
                         </div>
                         <div className="py-2">
                             <Link
+                                to="change-profile-picture"
+                                className="btn-block dropdown-item py-1 m-0"
+                            >
+                                <i className="fa fa-picture-o m-r-5"></i> Add or
+                                Edit Profile Picture
+                            </Link>
+                            <Link
                                 to="edit"
                                 className="btn-block dropdown-item py-1 m-0"
                             >
                                 <i className="fa fa-pencil m-r-5"></i> Edit
-                                Profile
+                                Personal Details
                             </Link>
                             <Link
-                                to="/dashboard/change-password"
+                                to="change-password"
                                 className="btn-block dropdown-item py-1 m-0"
                             >
                                 <i className="fa fa-lock m-r-5"></i> Change
@@ -99,7 +107,10 @@ const ProfilePage = () => {
                                 <i className="fa fa-trash-o m-r-5"></i> Delete
                                 Profile
                             </Link> */}
-                            <button className="btn-block dropdown-item py-1 m-0">
+                            <button
+                                className="btn-block dropdown-item py-1 m-0"
+                                onClick={() => dispatch(logout())}
+                            >
                                 <i className="fa fa-lock m-r-5"></i> Logout
                             </button>
                         </div>

@@ -68,6 +68,25 @@ export const getRecruiterByUserId = createAsyncThunk(
     }
 );
 
+export const getRecruitersByDate = createAsyncThunk(
+    "recruiter/get-recruiter-by-date",
+    async (uid, thunkAPI) => {
+        try {
+            return await recruiterService.getRecruitersByDate();
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.response.data ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
 export const saveRecruiters = createAsyncThunk(
     "recruiter/save-recruiters",
     async (data, thunkAPI) => {
@@ -173,6 +192,10 @@ export const recruiterSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.recruiter = null;
+            state.recruiters = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -187,6 +210,22 @@ export const recruiterSlice = createSlice({
                 state.type = action.type;
             })
             .addCase(getRecruiters.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(getRecruitersByDate.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(getRecruitersByDate.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.recruiters = action.payload;
+                state.type = action.type;
+            })
+            .addCase(getRecruitersByDate.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.type = action.type;
@@ -309,5 +348,5 @@ export const recruiterSlice = createSlice({
     },
 });
 
-export const { reset } = recruiterSlice.actions;
+export const { reset, clear } = recruiterSlice.actions;
 export default recruiterSlice.reducer;

@@ -14,6 +14,11 @@ const getShortLists = async () => {
     return res.data;
 };
 
+const getShortListsByDate = async () => {
+    const res = await axios.get(`${API_URL_SEARCH}/shortlist/by-date`);
+    return res.data;
+};
+
 const getFavourites = async () => {
     const res = await axios.get(`${API_URL_SEARCH}/favourite`);
     return res.data;
@@ -113,6 +118,7 @@ const searchService = {
     getSearch,
     getShortLists,
     getFavourites,
+    getShortListsByDate,
     getCandidateFavourites,
     getCandidatesRequestList,
     getPages,

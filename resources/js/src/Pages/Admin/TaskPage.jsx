@@ -104,6 +104,18 @@ const TaskPage = () => {
                                     <div className="row">
                                         <div className="col-12 col-md-4">
                                             <p className="text-muted float-md-right">
+                                                Description:
+                                            </p>
+                                        </div>
+                                        <div className="col-12 col-md-8">
+                                            <p className="fw-bold">
+                                                {task?.description || ""}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-12 col-md-4">
+                                            <p className="text-muted float-md-right">
                                                 Date Added:
                                             </p>
                                         </div>

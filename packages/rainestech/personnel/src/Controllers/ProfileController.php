@@ -3,6 +3,7 @@
 namespace Rainestech\Personnel\Controllers;
 
 use App\Notifications\ProfileUpdated;
+use Carbon\Carbon;
 use Rainestech\AdminApi\Controllers\BaseApiController;
 use Rainestech\AdminApi\Entity\Documents;
 use Rainestech\AdminApi\Entity\Users;
@@ -23,12 +24,26 @@ class ProfileController extends BaseApiController {
         return response()->json(Recruiters::whereNotNull('userId')->paginate(20));
     }
 
+    public function recruitersByDate() {
+        $recruiters = Recruiters::whereNotNull('userId')->get();
+        return response()->json($recruiters->groupBy(function ($data){
+            return Carbon::parse($data->created_at)->format('m-Y');
+        }));
+    }
+
     public function getSkillSets() {
         return response()->json(SkillSet::all());
     }
 
     public function candidates() {
         return response()->json(Candidates::whereNotNull('userId')->paginate(20));
+    }
+
+    public function candidatesByDate() {
+        $candidates = Candidates::whereNotNull('userId')->get();
+        return response()->json($candidates->groupBy(function ($data){
+            return Carbon::parse($data->created_at)->format('m-Y');
+        }));
     }
 
     public function getRecruiterByUserID($userID) {

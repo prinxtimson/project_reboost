@@ -26,6 +26,11 @@ const CandidateProfilePage = () => {
                                 <li className="breadcrumb-item">
                                     <Link to="/dashboard">Dashboard</Link>
                                 </li>
+                                <li className="breadcrumb-item">
+                                    <Link to="/dashboard/candidates">
+                                        Candidates
+                                    </Link>
+                                </li>
                                 <li className="breadcrumb-item active">
                                     Candidate
                                 </li>
@@ -40,7 +45,7 @@ const CandidateProfilePage = () => {
                             <div className="row">
                                 <div className="col-12 col-md-5 ">
                                     <div className="p-4 animated fadeIn bg-white shadow rounded">
-                                        <div className="row">
+                                        <div className="row mb-3">
                                             <div
                                                 className=" col-4"
                                                 style={{
@@ -48,7 +53,10 @@ const CandidateProfilePage = () => {
                                                     width: 100,
                                                 }}
                                             >
-                                                <div className="avatar w-100 h-100">
+                                                <div
+                                                    className="avatar w-100"
+                                                    style={{ height: "80%" }}
+                                                >
                                                     <img
                                                         src={
                                                             !candidate?.user
@@ -82,6 +90,51 @@ const CandidateProfilePage = () => {
                                                 </p>
                                             </div>
                                         </div>
+
+                                        <div className="row">
+                                            <div className="col-4">
+                                                <p className="text-muted ">
+                                                    <i className="fa fa-phone m-r-5"></i>{" "}
+                                                    Phone:
+                                                </p>
+                                            </div>
+                                            <div className="col-8">
+                                                <p className="fw-bold text-break">
+                                                    {candidate?.user?.phoneNo ||
+                                                        ""}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-4">
+                                                <p className="text-muted ">
+                                                    <i className="fa fa-envelope m-r-5"></i>{" "}
+                                                    Email:
+                                                </p>
+                                            </div>
+                                            <div className="col-8">
+                                                <p className="fw-bold text-break">
+                                                    {candidate?.user?.email ||
+                                                        ""}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="row">
+                                            <div className="col-4">
+                                                <p className="text-muted ">
+                                                    <i className="fa fa-map-marker m-r-5"></i>{" "}
+                                                    Location:
+                                                </p>
+                                            </div>
+                                            <div className="col-8">
+                                                <p className="fw-bold text-break">
+                                                    {candidate?.user
+                                                        ?.location || ""}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -92,7 +145,10 @@ const CandidateProfilePage = () => {
                                                 About Me
                                             </h4>
                                             <div className="col-12 col-md-8">
-                                                {candidate.description || ""}
+                                                {candidate.description?.replace(
+                                                    /(<([^>]+)>)/gi,
+                                                    ""
+                                                ) || ""}
                                             </div>
                                         </div>
 

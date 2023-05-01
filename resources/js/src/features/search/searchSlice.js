@@ -48,6 +48,25 @@ export const getShortLists = createAsyncThunk(
     }
 );
 
+export const getShortListsByDate = createAsyncThunk(
+    "search/get-shortlist-by-date",
+    async (args, thunkAPI) => {
+        try {
+            return await searchService.getShortListsByDate();
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.response.data ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
 export const getFavourites = createAsyncThunk(
     "search/get-favourites",
     async (args, thunkAPI) => {
@@ -419,6 +438,9 @@ export const searchSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.data = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -449,6 +471,22 @@ export const searchSlice = createSlice({
                 state.type = action.type;
             })
             .addCase(getShortLists.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(getShortListsByDate.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(getShortListsByDate.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.data = action.payload;
+                state.type = action.type;
+            })
+            .addCase(getShortListsByDate.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.type = action.type;
@@ -761,5 +799,5 @@ export const searchSlice = createSlice({
     },
 });
 
-export const { reset } = searchSlice.actions;
+export const { reset, clear } = searchSlice.actions;
 export default searchSlice.reducer;

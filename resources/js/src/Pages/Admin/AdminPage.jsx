@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     Chart as ChartJS,
@@ -16,6 +16,9 @@ import { Line, Bar } from "react-chartjs-2";
 import AuthContainer from "../../components/AuthContainer";
 import { getMyActivities } from "../../features/activity/activitySlice";
 import moment from "moment";
+import { getRecruitersByDate } from "../../features/recruiter/recruiterSlice";
+import { getCandidateByDate } from "../../features/candidate/candidateSlice";
+import { getShortListsByDate } from "../../features/search/searchSlice";
 
 ChartJS.register(
     CategoryScale,
@@ -30,13 +33,73 @@ ChartJS.register(
 );
 
 const AdminPage = () => {
+    const [recruiterDataset, setRecruiterDataset] = useState({
+        labels: [],
+        data: [],
+    });
+    const [candidateDataset, setCandidateDataset] = useState({
+        labels: [],
+        data: [],
+    });
+    const [shortlistDataset, setShortlistDataset] = useState({
+        labels: [],
+        data: [],
+    });
     const dispatch = useDispatch();
 
     const { activities } = useSelector((state) => state.activity);
+    const { recruiters } = useSelector((state) => state.recruiter);
+    const { candidates } = useSelector((state) => state.candidate);
+    const { data } = useSelector((state) => state.search);
 
     useEffect(() => {
         dispatch(getMyActivities());
+        dispatch(getRecruitersByDate());
+        dispatch(getCandidateByDate());
+        dispatch(getShortListsByDate());
     }, []);
+
+    useEffect(() => {
+        if (recruiters) {
+            let _labels = [];
+            let _data = [];
+            for (let key in recruiters) {
+                if (recruiters.hasOwnProperty(key)) {
+                    _labels.push(key);
+                    _data.push(recruiters[key].length);
+                }
+            }
+            setRecruiterDataset({ labels: _labels, data: _data });
+        }
+    }, [recruiters]);
+
+    useEffect(() => {
+        if (candidates) {
+            let _labels = [];
+            let _data = [];
+            for (let key in candidates) {
+                if (candidates.hasOwnProperty(key)) {
+                    _labels.push(key);
+                    _data.push(candidates[key].length);
+                }
+            }
+            setCandidateDataset({ labels: _labels, data: _data });
+        }
+    }, [candidates]);
+
+    useEffect(() => {
+        if (data) {
+            let _labels = [];
+            let _data = [];
+            for (let key in data) {
+                if (data.hasOwnProperty(key)) {
+                    _labels.push(key);
+                    _data.push(data[key].length);
+                }
+            }
+            setShortlistDataset({ labels: _labels, data: _data });
+        }
+    }, [data]);
 
     return (
         <AuthContainer>
@@ -90,12 +153,12 @@ const AdminPage = () => {
                                         <Line
                                             datasetIdKey="id"
                                             data={{
-                                                labels: ["Jun", "Jul", "Aug"],
+                                                labels: recruiterDataset.labels,
                                                 datasets: [
                                                     {
                                                         id: 1,
                                                         label: "Recruiters",
-                                                        data: [5, 6, 7],
+                                                        data: recruiterDataset.data,
                                                         borderColor:
                                                             "rgb(255, 99, 132)",
                                                         backgroundColor:
@@ -116,12 +179,12 @@ const AdminPage = () => {
                                         <Line
                                             datasetIdKey="id"
                                             data={{
-                                                labels: ["Jun", "Jul", "Aug"],
+                                                labels: candidateDataset.labels,
                                                 datasets: [
                                                     {
                                                         id: 1,
                                                         label: "Candidates",
-                                                        data: [5, 6, 7],
+                                                        data: candidateDataset.data,
                                                         borderColor:
                                                             "rgb(53, 162, 235)",
                                                         backgroundColor:
@@ -142,12 +205,12 @@ const AdminPage = () => {
                                         <Bar
                                             datasetIdKey="id"
                                             data={{
-                                                labels: ["Jun", "Jul", "Aug"],
+                                                labels: shortlistDataset.labels,
                                                 datasets: [
                                                     {
                                                         id: 1,
                                                         label: "Candidates",
-                                                        data: [5, 6, 7],
+                                                        data: shortlistDataset.data,
                                                         borderColor:
                                                             "rgb(53, 162, 235)",
                                                         backgroundColor:

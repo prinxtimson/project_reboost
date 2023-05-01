@@ -49,6 +49,25 @@ export const getNextPage = createAsyncThunk(
     }
 );
 
+export const getCandidateByDate = createAsyncThunk(
+    "candidate/get-candidate-by-date",
+    async (uid, thunkAPI) => {
+        try {
+            return await candidateService.getCandidateByDate(uid);
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.response.data ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
 export const getCandidateByUserId = createAsyncThunk(
     "candidate/get-candidate-by-user-id",
     async (uid, thunkAPI) => {
@@ -135,6 +154,10 @@ export const candidateSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.candidate = null;
+            state.candidates = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -149,6 +172,22 @@ export const candidateSlice = createSlice({
                 state.type = action.type;
             })
             .addCase(getCandidates.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(getCandidateByDate.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(getCandidateByDate.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.candidates = action.payload;
+                state.type = action.type;
+            })
+            .addCase(getCandidateByDate.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.type = action.type;
@@ -237,5 +276,5 @@ export const candidateSlice = createSlice({
     },
 });
 
-export const { reset } = candidateSlice.actions;
+export const { reset, clear } = candidateSlice.actions;
 export default candidateSlice.reducer;

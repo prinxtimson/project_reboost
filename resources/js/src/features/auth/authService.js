@@ -22,6 +22,18 @@ const editMe = async (data) => {
     return res.data;
 };
 
+const editPassport = async (data) => {
+    const res = await axios.post("/api/v1/fs", data);
+
+    return res.data;
+};
+
+const deletePassport = async (id) => {
+    const res = await axios.delete(`/api/v1/fs/rem/${id}`);
+
+    return res.data;
+};
+
 const logout = async () => {
     const res = await axios.get(`${API_URL}/logout`);
     localStorage.removeItem("jwt_token");
@@ -32,6 +44,8 @@ const logout = async () => {
 const authService = {
     login,
     editMe,
+    editPassport,
+    deletePassport,
     logout,
     getMe,
 };

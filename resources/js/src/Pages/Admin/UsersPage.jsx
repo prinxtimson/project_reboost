@@ -1,50 +1,31 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContainer from "../../components/AuthContainer";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
     getAdmins,
-    getCandidates,
-    getRecruiters,
-    getUsers,
     getNextPage,
     deleteUser,
-    searchCandidates,
     searchAdmins,
-    searchRecruiters,
-    filterCandidates,
-    filterRecruiters,
+    clear,
+    reset,
 } from "../../features/user/userSlice";
-import moment from "moment";
 
 const UsersPage = () => {
     const [searchText, setSearchText] = useState("");
-    const [filter, setFilter] = useState("");
-    const [option, setOption] = useState("");
     const [gridToggle, setGridToggle] = useState(true);
-    const [data, setData] = useState({
-        orderBy: "created_at",
-        sortBy: "ASC",
-    });
-    const { path } = useParams();
 
     const dispatch = useDispatch();
-    const { users, isLoading, isError, isSuccess, message, type } = useSelector(
-        (state) => state.user
-    );
+    const { users, isLoading } = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (path === "admin") {
-            dispatch(getAdmins());
-        } else if (path === "candidate") {
-            dispatch(getCandidates());
-        } else if (path === "recruiter") {
-            dispatch(getRecruiters());
-        } else {
-            dispatch(getUsers());
-        }
-        setGridToggle(true);
-    }, [path]);
+        dispatch(getAdmins());
+
+        return () => {
+            dispatch(reset());
+            dispatch(clear());
+        };
+    }, []);
 
     const prevPage = () => {
         dispatch(getNextPage(users.prev_page_url));
@@ -55,64 +36,12 @@ const UsersPage = () => {
     };
 
     const handleSearchClcik = () => {
-        if (path === "admin") {
-            dispatch(searchAdmins(searchText));
-        } else if (path === "candidate") {
-            dispatch(searchCandidates(searchText));
-        } else if (path === "recruiter") {
-            dispatch(searchRecruiters(searchText));
-        } else {
-            dispatch(getUsers());
-        }
+        dispatch(searchAdmins(searchText));
     };
 
     const handleCancelClick = () => {
-        if (path === "admin") {
-            dispatch(getAdmins());
-        } else if (path === "candidate") {
-            dispatch(getCandidates());
-        } else if (path === "recruiter") {
-            dispatch(getRecruiters());
-        } else {
-            dispatch(getUsers());
-        }
+        dispatch(getAdmins());
         setSearchText("");
-    };
-
-    const handleFilterClick = () => {
-        if (path === "candidate") {
-            dispatch(filterCandidates({ filter, option }));
-        } else if (path === "recruiter") {
-            dispatch(filterRecruiters({ filter, option }));
-        } else {
-            dispatch(getUsers());
-        }
-    };
-
-    const handleClearFilterClick = () => {
-        if (path === "admin") {
-            dispatch(getAdmins());
-        } else if (path === "candidate") {
-            dispatch(getCandidates());
-        } else if (path === "recruiter") {
-            dispatch(getRecruiters());
-        } else {
-            dispatch(getUsers());
-        }
-        setFilter("");
-        setOption("");
-    };
-
-    const handleSortClick = () => {
-        if (path === "admin") {
-            dispatch(getAdmins(data));
-        } else if (path === "candidate") {
-            dispatch(getCandidates(data));
-        } else if (path === "recruiter") {
-            dispatch(getRecruiters(data));
-        } else {
-            dispatch(getUsers());
-        }
     };
 
     return (
@@ -122,26 +51,22 @@ const UsersPage = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">
-                                {path.charAt(0).toUpperCase() + path.slice(1)}
-                            </h3>
+                            <h3 className="page-title">Admin</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item">
                                     <Link to="/dashboard">Dashboard</Link>
                                 </li>
                                 <li className="breadcrumb-item active">
-                                    {path.charAt(0).toUpperCase() +
-                                        path.slice(1)}
+                                    Admin
                                 </li>
                             </ul>
                         </div>
                         <div className="col-auto float-right ml-auto">
                             <Link
                                 className="btn add-btn btn-ghost-primary"
-                                to="/dashboard/add-user"
+                                to="/dashboard/admin/add"
                             >
-                                <i className="fa fa-plus"></i> Add{" "}
-                                {path.charAt(0).toUpperCase() + path.slice(1)}
+                                <i className="fa fa-plus"></i> Add Admin
                             </Link>
                             <div className="view-icons">
                                 <button
@@ -169,7 +94,7 @@ const UsersPage = () => {
                 <div className="animated fadeIn">
                     {/* <!-- Search Filter --> */}
                     <div className="row mx-2 bg-white mb-3">
-                        <div className="col-12 col-md-6 py-3">
+                        <div className="col-12 py-3">
                             <div className="row">
                                 <div className="col-sm-6 ">
                                     <div className="">
@@ -185,944 +110,153 @@ const UsersPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="col-sm-6 ">
-                                    <div className=" d-flex">
-                                        <button
-                                            onClick={handleSearchClcik}
-                                            className="btn btn-primary me-2"
-                                        >
-                                            Search
-                                        </button>
-                                        <button
-                                            onClick={handleCancelClick}
-                                            className="btn btn-secondary "
-                                        >
-                                            Cancel
-                                        </button>
+                                <div className="col-sm-6">
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <button
+                                                onClick={handleSearchClcik}
+                                                className="btn btn-primary me-2 w-100"
+                                            >
+                                                Search
+                                            </button>
+                                        </div>
+                                        <div className="col-6">
+                                            <button
+                                                onClick={handleCancelClick}
+                                                className="btn btn-secondary w-100"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="col-12 col-md-6 py-3">
-                            <div className="">
-                                <form className="row g-1">
-                                    <div className=" col-4">
-                                        <select
-                                            className="form-select "
-                                            id="orderBy"
-                                            placeholder="Order By"
-                                            aria-label="order by select"
-                                            value={data.orderBy}
-                                            onChange={(e) =>
-                                                setData({
-                                                    ...data,
-                                                    orderBy: e.target.value,
-                                                })
-                                            }
-                                        >
-                                            <option value="created_at">
-                                                Date Created
-                                            </option>
-                                            <option value="updated_at">
-                                                Date Modified
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div className="col-4">
-                                        <select
-                                            className="form-select floating"
-                                            id="sortBy"
-                                            value={data.sortBy}
-                                            aria-label="sort by select"
-                                            placeholder="Sort By"
-                                            onChange={(e) =>
-                                                setData({
-                                                    ...data,
-                                                    sortBy: e.target.value,
-                                                })
-                                            }
-                                        >
-                                            <option value="ASC">
-                                                By Ascending Order
-                                            </option>
-                                            <option value="DESC">
-                                                By Descending Order
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div className="col-4">
-                                        <button
-                                            type="button"
-                                            onClick={handleSortClick}
-                                            className="btn btn-primary w-100"
-                                        >
-                                            Sort
-                                        </button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
                     </div>
-                    {path == "admin" ? null : (
-                        <div className="row mx-2 mb-3 bg-white">
-                            <div className="col-4 py-3">
-                                <div className=" w-100">
-                                    <select
-                                        className="form-select floating"
-                                        id="filterBy"
-                                        value={filter}
-                                        aria-label="filter by select"
-                                        placeholder="Filter By"
-                                        onChange={(e) =>
-                                            setFilter(e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select filter</option>
-                                        {path == "recruiter" &&
-                                            recruiterOptions.map((item) => (
-                                                <option
-                                                    value={item.value}
-                                                    key={item.name}
-                                                >
-                                                    {item.name}
-                                                </option>
-                                            ))}
-                                        {path == "candidate" &&
-                                            candidateOptions.map((item) => (
-                                                <option
-                                                    value={item.value}
-                                                    key={item.name}
-                                                >
-                                                    {item.name}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-4 py-3">
-                                <div className=" w-100">
-                                    <select
-                                        className="form-select floating"
-                                        id="filterOption"
-                                        value={option}
-                                        aria-label=" select"
-                                        placeholder="Select Option"
-                                        onChange={(e) =>
-                                            setOption(e.target.value)
-                                        }
-                                    >
-                                        <option value="">Select option</option>
-                                        {filter == "industry" &&
-                                            INDUSTRYOPTIONS.map((item) => (
-                                                <option value={item} key={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                        {filter == "location" &&
-                                            LOCATIONOPTIONS.map((item) => (
-                                                <option value={item} key={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                        {filter == "skills" &&
-                                            SKILLSOPRIONS.map((item) => (
-                                                <option value={item} key={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                        {filter == "title" &&
-                                            ROLEOPTIONS.map((item) => (
-                                                <option value={item} key={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-4 py-3 d-flex">
-                                <button
-                                    type="button"
-                                    onClick={handleFilterClick}
-                                    className="btn btn-primary w-100"
-                                >
-                                    Filter
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleClearFilterClick}
-                                    className="btn btn-secondary w-100 mx-2"
-                                >
-                                    Clear Filter
-                                </button>
-                            </div>
-                        </div>
-                    )}
+
                     {/* <!-- Search Filter --> */}
 
                     {gridToggle ? (
                         <div className="">
-                            {path === "recruiter" ? (
-                                <div className="">
-                                    <div className="py-4">
-                                        <h3 className="fw-bold text-center mb-lg-4">
-                                            Pending Approvals
-                                        </h3>
-                                        <div className="row staff-grid-row">
-                                            {users &&
-                                                users.data.map((item) =>
-                                                    !item.adminVerified ? (
-                                                        <div
-                                                            className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
-                                                            key={item.id}
-                                                        >
-                                                            <div className="profile-widget shadow">
-                                                                <div className="profile-img">
-                                                                    <Link
-                                                                        to={
-                                                                            path ===
-                                                                            "admin"
-                                                                                ? "#"
-                                                                                : `/dashboard/users/${path}/${item.id}`
-                                                                        }
-                                                                        className="avatar"
-                                                                    >
-                                                                        <img
-                                                                            src={
-                                                                                !item?.avatar &&
-                                                                                !item?.passport
-                                                                                    ? "/assets/img/avatars/0.jpeg"
-                                                                                    : item?.avatar
-                                                                                    ? `${
-                                                                                          item?.avatar
-                                                                                      }?${new Date().getTime()}`
-                                                                                    : `/fs/dl/${
-                                                                                          item
-                                                                                              ?.passport
-                                                                                              .link
-                                                                                      }?${new Date().getTime()}`
-                                                                            }
-                                                                            alt={
-                                                                                item.name
-                                                                            }
-                                                                        />
-                                                                    </Link>
-                                                                </div>
-                                                                <div className="dropdown profile-action">
-                                                                    <button
-                                                                        className="action-icon dropdown-toggle bg-transparent border-0 btn-sm"
-                                                                        id="dropdownMenuButton1"
-                                                                        data-bs-toggle="dropdown"
-                                                                        aria-expanded="false"
-                                                                    >
-                                                                        <i className="material-icons">
-                                                                            more_vert
-                                                                        </i>
-                                                                    </button>
-                                                                    <div
-                                                                        className="dropdown-menu dropdown-menu-right"
-                                                                        aria-labelledby="dropdownMenuButton1"
-                                                                    >
-                                                                        {path ===
-                                                                        "admin" ? null : (
-                                                                            <Link
-                                                                                to={`/dashboard/users/${path}/${item.id}`}
-                                                                                className="btn-block dropdown-item py-1 m-0"
-                                                                            >
-                                                                                <i className="fa fa-openid m-r-5"></i>{" "}
-                                                                                View
-                                                                                Details
-                                                                            </Link>
-                                                                        )}
-
-                                                                        {/* <button className="btn-block dropdown-item py-1 m-0">
-                                                        <i className="fa fa-pencil m-r-5"></i>{" "}
-                                                        Edit
-                                                    </button> */}
-                                                                        <button
-                                                                            className="btn-block dropdown-item py-1 m-0 btn-danger text-danger"
-                                                                            onClick={() =>
-                                                                                window.confirm(
-                                                                                    `You are about to delete user ${item.name}, this can't be undone.`
-                                                                                ) &&
-                                                                                dispatch(
-                                                                                    deleteUser(
-                                                                                        item
-                                                                                    )
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <i className="fa fa-trash-o m-r-5 text-danger"></i>{" "}
-                                                                            Delete
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                                <h4 className="user-name m-t-10 mb-0 text-ellipsis">
-                                                                    <Link
-                                                                        to={
-                                                                            path ===
-                                                                            "admin"
-                                                                                ? "#"
-                                                                                : `/dashboard/users/${path}/${item.id}`
-                                                                        }
-                                                                    >
-                                                                        {item.companyName
-                                                                            ? item.companyName
-                                                                            : item.name}
-                                                                    </Link>
-                                                                </h4>
-                                                                <small>
-                                                                    {item.location ||
-                                                                        ""}
-                                                                </small>
-                                                                <div className="mt-2 small text-muted">
-                                                                    {item.role}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ) : null
-                                                )}
-                                        </div>
-                                    </div>
-                                    <div className="border border-4"></div>
-                                    <div className="py-4 ">
-                                        <h3 className="fw-bold text-center mb-4">
-                                            Existing Recruiters
-                                        </h3>
-                                        <div className="row staff-grid-row">
-                                            {users &&
-                                                users.data.map((item) =>
-                                                    item.adminVerified ? (
-                                                        <div
-                                                            className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
-                                                            key={item.id}
-                                                        >
-                                                            <div className="profile-widget shadow">
-                                                                <div className="profile-img">
-                                                                    <Link
-                                                                        to={
-                                                                            path ===
-                                                                            "admin"
-                                                                                ? "#"
-                                                                                : `/dashboard/users/${path}/${item.id}`
-                                                                        }
-                                                                        className="avatar"
-                                                                    >
-                                                                        <img
-                                                                            src={
-                                                                                !item?.avatar &&
-                                                                                !item?.passport
-                                                                                    ? "/assets/img/avatars/0.jpeg"
-                                                                                    : item?.avatar
-                                                                                    ? `${
-                                                                                          item?.avatar
-                                                                                      }?${new Date().getTime()}`
-                                                                                    : `/fs/dl/${
-                                                                                          item
-                                                                                              ?.passport
-                                                                                              .link
-                                                                                      }?${new Date().getTime()}`
-                                                                            }
-                                                                            alt={
-                                                                                item.name
-                                                                            }
-                                                                        />
-                                                                    </Link>
-                                                                </div>
-                                                                <div className="dropdown profile-action">
-                                                                    <button
-                                                                        className="action-icon dropdown-toggle bg-transparent border-0 btn-sm"
-                                                                        id="dropdownMenuButton1"
-                                                                        data-bs-toggle="dropdown"
-                                                                        aria-expanded="false"
-                                                                    >
-                                                                        <i className="material-icons">
-                                                                            more_vert
-                                                                        </i>
-                                                                    </button>
-                                                                    <div
-                                                                        className="dropdown-menu dropdown-menu-right"
-                                                                        aria-labelledby="dropdownMenuButton1"
-                                                                    >
-                                                                        {path ===
-                                                                        "admin" ? null : (
-                                                                            <Link
-                                                                                to={`/dashboard/users/${path}/${item.id}`}
-                                                                                className="btn-block dropdown-item py-1 m-0"
-                                                                            >
-                                                                                <i className="fa fa-openid m-r-5"></i>{" "}
-                                                                                View
-                                                                                Details
-                                                                            </Link>
-                                                                        )}
-
-                                                                        {/* <button className="btn-block dropdown-item py-1 m-0">
-                                                        <i className="fa fa-pencil m-r-5"></i>{" "}
-                                                        Edit
-                                                    </button> */}
-                                                                        <button
-                                                                            className="btn-block dropdown-item py-1 m-0 btn-danger text-danger"
-                                                                            onClick={() =>
-                                                                                window.confirm(
-                                                                                    `You are about to delete user ${item.name}, this can't be undone.`
-                                                                                ) &&
-                                                                                dispatch(
-                                                                                    deleteUser(
-                                                                                        item
-                                                                                    )
-                                                                                )
-                                                                            }
-                                                                        >
-                                                                            <i className="fa fa-trash-o m-r-5 text-danger"></i>{" "}
-                                                                            Delete
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                                <h4 className="user-name m-t-10 mb-0 text-ellipsis">
-                                                                    <Link
-                                                                        to={
-                                                                            path ===
-                                                                            "admin"
-                                                                                ? "#"
-                                                                                : `/dashboard/users/${path}/${item.id}`
-                                                                        }
-                                                                    >
-                                                                        {item.companyName
-                                                                            ? item.companyName
-                                                                            : item.name}
-                                                                    </Link>
-                                                                </h4>
-                                                                <small>
-                                                                    {item.location ||
-                                                                        ""}
-                                                                </small>
-                                                                <div className="mt-2 small text-muted">
-                                                                    {item.role}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ) : null
-                                                )}
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row staff-grid-row">
-                                    {" "}
-                                    {users &&
-                                        users.data.map((item) => (
-                                            <div
-                                                className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
-                                                key={item.id}
-                                            >
-                                                <div className="profile-widget shadow">
-                                                    <div className="profile-img">
-                                                        <Link
-                                                            to={
-                                                                path === "admin"
-                                                                    ? "#"
-                                                                    : `/dashboard/users/${path}/${item.id}`
+                            <div className="row staff-grid-row">
+                                {" "}
+                                {users &&
+                                    users.data.map((item) => (
+                                        <div
+                                            className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
+                                            key={item.id}
+                                        >
+                                            <div className="profile-widget shadow">
+                                                <div className="profile-img">
+                                                    <div className="avatar">
+                                                        <img
+                                                            src={
+                                                                !item?.avatar &&
+                                                                !item?.passport
+                                                                    ? "/assets/img/avatars/0.jpeg"
+                                                                    : item?.avatar
+                                                                    ? `${
+                                                                          item?.avatar
+                                                                      }?${new Date().getTime()}`
+                                                                    : `/fs/dl/${
+                                                                          item
+                                                                              ?.passport
+                                                                              .link
+                                                                      }?${new Date().getTime()}`
                                                             }
-                                                            className="avatar"
-                                                        >
-                                                            <img
-                                                                src={
-                                                                    !item?.avatar &&
-                                                                    !item?.passport
-                                                                        ? "/assets/img/avatars/0.jpeg"
-                                                                        : item?.avatar
-                                                                        ? `${
-                                                                              item?.avatar
-                                                                          }?${new Date().getTime()}`
-                                                                        : `/fs/dl/${
-                                                                              item
-                                                                                  ?.passport
-                                                                                  .link
-                                                                          }?${new Date().getTime()}`
-                                                                }
-                                                                alt={item.name}
-                                                            />
-                                                        </Link>
-                                                    </div>
-                                                    <div className="dropdown profile-action">
-                                                        <button
-                                                            className="action-icon dropdown-toggle bg-transparent border-0 btn-sm"
-                                                            id="dropdownMenuButton1"
-                                                            data-bs-toggle="dropdown"
-                                                            aria-expanded="false"
-                                                        >
-                                                            <i className="material-icons">
-                                                                more_vert
-                                                            </i>
-                                                        </button>
-                                                        <div
-                                                            className="dropdown-menu dropdown-menu-right"
-                                                            aria-labelledby="dropdownMenuButton1"
-                                                        >
-                                                            {path ===
-                                                            "admin" ? null : (
-                                                                <Link
-                                                                    to={`/dashboard/users/${path}/${item.id}`}
-                                                                    className="btn-block dropdown-item py-1 m-0"
-                                                                >
-                                                                    <i className="fa fa-openid m-r-5"></i>{" "}
-                                                                    View Details
-                                                                </Link>
-                                                            )}
-
-                                                            {/* <button className="btn-block dropdown-item py-1 m-0">
-                                                        <i className="fa fa-pencil m-r-5"></i>{" "}
-                                                        Edit
-                                                    </button> */}
-                                                            <button
-                                                                className="btn-block dropdown-item py-1 m-0 btn-danger text-danger"
-                                                                onClick={() =>
-                                                                    window.confirm(
-                                                                        `You are about to delete user ${item.name}, this can't be undone.`
-                                                                    ) &&
-                                                                    dispatch(
-                                                                        deleteUser(
-                                                                            item
-                                                                        )
-                                                                    )
-                                                                }
-                                                            >
-                                                                <i className="fa fa-trash-o m-r-5 text-danger"></i>{" "}
-                                                                Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                    <h4 className="user-name m-t-10 mb-0 text-ellipsis">
-                                                        <Link
-                                                            to={
-                                                                path === "admin"
-                                                                    ? "#"
-                                                                    : `/dashboard/users/${path}/${item.id}`
-                                                            }
-                                                        >
-                                                            {item.name}
-                                                        </Link>
-                                                    </h4>
-                                                    <small>
-                                                        {item.location || ""}
-                                                    </small>
-                                                    <div className="mt-2 small text-muted">
-                                                        {item.role}
+                                                            alt={item.name}
+                                                        />
                                                     </div>
                                                 </div>
+                                                <div className="dropdown profile-action">
+                                                    <button
+                                                        className="action-icon dropdown-toggle bg-transparent border-0 btn-sm"
+                                                        id="dropdownMenuButton1"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false"
+                                                    >
+                                                        <i className="material-icons">
+                                                            more_vert
+                                                        </i>
+                                                    </button>
+                                                    <div
+                                                        className="dropdown-menu dropdown-menu-right"
+                                                        aria-labelledby="dropdownMenuButton1"
+                                                    >
+                                                        {/* <button className="btn-block dropdown-item py-1 m-0">
+                                                        <i className="fa fa-pencil m-r-5"></i>{" "}
+                                                        Edit
+                                                    </button> */}
+                                                        <button
+                                                            className="btn-block dropdown-item py-1 m-0 btn-danger text-danger"
+                                                            onClick={() =>
+                                                                window.confirm(
+                                                                    `You are about to delete user ${item.name}, this can't be undone.`
+                                                                ) &&
+                                                                dispatch(
+                                                                    deleteUser(
+                                                                        item
+                                                                    )
+                                                                )
+                                                            }
+                                                        >
+                                                            <i className="fa fa-trash-o m-r-5 text-danger"></i>{" "}
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <h4 className="user-name m-t-10 mb-0 text-ellipsis">
+                                                    {item.name}
+                                                </h4>
+                                                <small>
+                                                    {item.location || ""}
+                                                </small>
+                                                <div className="mt-2 small text-muted">
+                                                    {item.role}
+                                                </div>
                                             </div>
-                                        ))}
-                                </div>
-                            )}
+                                        </div>
+                                    ))}
+                            </div>
                         </div>
                     ) : (
                         <div className="">
-                            {path === "recruiter" ? (
-                                <div className="">
-                                    <div className="py-4">
-                                        <h3 className="fw-bold text-center mb-lg-4">
-                                            Pending Approvals
-                                        </h3>
-                                        <div className="card">
-                                            <div className="card-body table-responsive">
-                                                <table className="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">
-                                                                ID
-                                                            </th>
-                                                            {path ===
-                                                                "candidate" && (
-                                                                <th scope="col">
-                                                                    Job Title
-                                                                </th>
-                                                            )}
-                                                            {path ===
-                                                                "recruiter" && (
-                                                                <th scope="col">
-                                                                    Company Name
-                                                                </th>
-                                                            )}
-                                                            <th scope="col">
-                                                                Fullname
-                                                            </th>
-                                                            <th scope="col">
-                                                                Email
-                                                            </th>
-                                                            <th scope="col">
-                                                                Phone
-                                                            </th>
-                                                            {path !==
-                                                                "candidate" && (
-                                                                <th scope="col">
-                                                                    Location
-                                                                </th>
-                                                            )}
-                                                            {(path !==
-                                                                "candidate" ||
-                                                                path !==
-                                                                    "recruiter") && (
-                                                                <th scope="col">
-                                                                    Updated At
-                                                                </th>
-                                                            )}
-                                                            {(path !==
-                                                                "candidate" ||
-                                                                path !==
-                                                                    "recruiter") && (
-                                                                <th scope="col">
-                                                                    Status
-                                                                </th>
-                                                            )}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {users &&
-                                                            users.data.map(
-                                                                (item) =>
-                                                                    !item.adminVerified ? (
-                                                                        <tr
-                                                                            key={
-                                                                                item.id
-                                                                            }
-                                                                        >
-                                                                            <th scope="row">
-                                                                                {
-                                                                                    item.id
-                                                                                }
-                                                                            </th>
-                                                                            {path ===
-                                                                                "candidate" && (
-                                                                                <td scope="col">
-                                                                                    {item
-                                                                                        .candidate
-                                                                                        ?.title ||
-                                                                                        ""}
-                                                                                </td>
-                                                                            )}
-                                                                            {path ===
-                                                                                "recruiter" && (
-                                                                                <td scope="col">
-                                                                                    {item?.companyName ||
-                                                                                        ""}
-                                                                                </td>
-                                                                            )}
-                                                                            <td>
-                                                                                {path ===
-                                                                                "admin" ? (
-                                                                                    item.name
-                                                                                ) : (
-                                                                                    <Link
-                                                                                        to={`/dashboard/users/${path}/${item.id}`}
-                                                                                    >
-                                                                                        {
-                                                                                            item.name
-                                                                                        }
-                                                                                    </Link>
-                                                                                )}
-                                                                            </td>
-                                                                            <td>
-                                                                                {
-                                                                                    item.email
-                                                                                }
-                                                                            </td>
-                                                                            <td>
-                                                                                {
-                                                                                    item.phoneNo
-                                                                                }
-                                                                            </td>
-                                                                            {path !==
-                                                                                "candidate" && (
-                                                                                <th scope="col">
-                                                                                    {item.location ||
-                                                                                        ""}
-                                                                                </th>
-                                                                            )}
-                                                                            {(path !==
-                                                                                "candidate" ||
-                                                                                path !==
-                                                                                    "recruiter") && (
-                                                                                <th scope="col">
-                                                                                    {moment(
-                                                                                        item.updated_at
-                                                                                    ).fromNow()}
-                                                                                </th>
-                                                                            )}
-                                                                            {(path !==
-                                                                                "candidate" ||
-                                                                                path !==
-                                                                                    "recruiter") && (
-                                                                                <th scope="col">
-                                                                                    {item.adminVerified
-                                                                                        ? "Approved"
-                                                                                        : "Pending"}
-                                                                                </th>
-                                                                            )}
-                                                                        </tr>
-                                                                    ) : null
-                                                            )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="border border-4"></div>
-                                    <div className="py-4">
-                                        <h3 className="fw-bold text-center mb-4">
-                                            Existing Recruiters
-                                        </h3>
-                                        <div className="card">
-                                            <div className="card-body table-responsive">
-                                                <table className="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">
-                                                                ID
-                                                            </th>
-                                                            {path ===
-                                                                "candidate" && (
-                                                                <th scope="col">
-                                                                    Job Title
-                                                                </th>
-                                                            )}
-                                                            {path ===
-                                                                "recruiter" && (
-                                                                <th scope="col">
-                                                                    Company Name
-                                                                </th>
-                                                            )}
-                                                            <th scope="col">
-                                                                Fullname
-                                                            </th>
-                                                            <th scope="col">
-                                                                Email
-                                                            </th>
-                                                            <th scope="col">
-                                                                Phone
-                                                            </th>
-                                                            {path !==
-                                                                "candidate" && (
-                                                                <th scope="col">
-                                                                    Location
-                                                                </th>
-                                                            )}
-                                                            {(path !==
-                                                                "candidate" ||
-                                                                path !==
-                                                                    "recruiter") && (
-                                                                <th scope="col">
-                                                                    Updated At
-                                                                </th>
-                                                            )}
-                                                            {(path !==
-                                                                "candidate" ||
-                                                                path !==
-                                                                    "recruiter") && (
-                                                                <th scope="col">
-                                                                    Status
-                                                                </th>
-                                                            )}
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {users &&
-                                                            users.data.map(
-                                                                (item) =>
-                                                                    item.adminVerified ? (
-                                                                        <tr
-                                                                            key={
-                                                                                item.id
-                                                                            }
-                                                                        >
-                                                                            <th scope="row">
-                                                                                {
-                                                                                    item.id
-                                                                                }
-                                                                            </th>
-                                                                            {path ===
-                                                                                "candidate" && (
-                                                                                <td scope="col">
-                                                                                    {item
-                                                                                        .candidate
-                                                                                        ?.title ||
-                                                                                        ""}
-                                                                                </td>
-                                                                            )}
-                                                                            {path ===
-                                                                                "recruiter" && (
-                                                                                <td scope="col">
-                                                                                    {item?.companyName ||
-                                                                                        ""}
-                                                                                </td>
-                                                                            )}
-                                                                            <td>
-                                                                                {path ===
-                                                                                "admin" ? (
-                                                                                    item.name
-                                                                                ) : (
-                                                                                    <Link
-                                                                                        to={`/dashboard/users/${path}/${item.id}`}
-                                                                                    >
-                                                                                        {
-                                                                                            item.name
-                                                                                        }
-                                                                                    </Link>
-                                                                                )}
-                                                                            </td>
-                                                                            <td>
-                                                                                {
-                                                                                    item.email
-                                                                                }
-                                                                            </td>
-                                                                            <td>
-                                                                                {
-                                                                                    item.phoneNo
-                                                                                }
-                                                                            </td>
-                                                                            {path !==
-                                                                                "candidate" && (
-                                                                                <th scope="col">
-                                                                                    {item.location ||
-                                                                                        ""}
-                                                                                </th>
-                                                                            )}
-                                                                            {(path !==
-                                                                                "candidate" ||
-                                                                                path !==
-                                                                                    "recruiter") && (
-                                                                                <th scope="col">
-                                                                                    {moment(
-                                                                                        item.updated_at
-                                                                                    ).fromNow()}
-                                                                                </th>
-                                                                            )}
-                                                                            {(path !==
-                                                                                "candidate" ||
-                                                                                path !==
-                                                                                    "recruiter") && (
-                                                                                <th scope="col">
-                                                                                    {item.adminVerified
-                                                                                        ? "Approved"
-                                                                                        : "Pending"}
-                                                                                </th>
-                                                                            )}
-                                                                        </tr>
-                                                                    ) : null
-                                                            )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div className="card">
+                                <div className="card-body table-responsive">
+                                    <table className="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">ID</th>
+
+                                                <th scope="col">Fullname</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Phone</th>
+
+                                                <th scope="col">Location</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {users &&
+                                                users.data.map((item) => (
+                                                    <tr key={item.id}>
+                                                        <th scope="row">
+                                                            {item.id}
+                                                        </th>
+
+                                                        <td>{item.name}</td>
+                                                        <td>{item.email}</td>
+                                                        <td>{item.phoneNo}</td>
+
+                                                        <th scope="col">
+                                                            {item.location ||
+                                                                ""}
+                                                        </th>
+                                                    </tr>
+                                                ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                            ) : (
-                                <div className="card">
-                                    <div className="card-body table-responsive">
-                                        <table className="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">ID</th>
-                                                    {path === "candidate" && (
-                                                        <th scope="col">
-                                                            Job Title
-                                                        </th>
-                                                    )}
-                                                    <th scope="col">
-                                                        Fullname
-                                                    </th>
-                                                    <th scope="col">Email</th>
-                                                    <th scope="col">Phone</th>
-                                                    {path !== "candidate" && (
-                                                        <th scope="col">
-                                                            Location
-                                                        </th>
-                                                    )}
-                                                    {(path !== "candidate" ||
-                                                        path !==
-                                                            "recruiter") && (
-                                                        <th scope="col">
-                                                            Updated At
-                                                        </th>
-                                                    )}
-                                                    {(path !== "candidate" ||
-                                                        path !==
-                                                            "recruiter") && (
-                                                        <th scope="col">
-                                                            Status
-                                                        </th>
-                                                    )}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {users &&
-                                                    users.data.map((item) => (
-                                                        <tr key={item.id}>
-                                                            <th scope="row">
-                                                                {item.id}
-                                                            </th>
-                                                            {path ===
-                                                                "candidate" && (
-                                                                <td scope="col">
-                                                                    {item
-                                                                        .candidate
-                                                                        ?.title ||
-                                                                        ""}
-                                                                </td>
-                                                            )}
-                                                            <td>
-                                                                {path ===
-                                                                "admin" ? (
-                                                                    item.name
-                                                                ) : (
-                                                                    <Link
-                                                                        to={`/dashboard/users/${path}/${item.id}`}
-                                                                    >
-                                                                        {
-                                                                            item.name
-                                                                        }
-                                                                    </Link>
-                                                                )}
-                                                            </td>
-                                                            <td>
-                                                                {item.email}
-                                                            </td>
-                                                            <td>
-                                                                {item.phoneNo}
-                                                            </td>
-                                                            {path !==
-                                                                "candidate" && (
-                                                                <th scope="col">
-                                                                    {item.location ||
-                                                                        ""}
-                                                                </th>
-                                                            )}
-                                                            {(path !==
-                                                                "candidate" ||
-                                                                path !==
-                                                                    "recruiter") && (
-                                                                <th scope="col">
-                                                                    {moment(
-                                                                        item.updated_at
-                                                                    ).fromNow()}
-                                                                </th>
-                                                            )}
-                                                            {(path !==
-                                                                "candidate" ||
-                                                                path !==
-                                                                    "recruiter") && (
-                                                                <th scope="col">
-                                                                    {item.adminVerified
-                                                                        ? "Approved"
-                                                                        : "Pending"}
-                                                                </th>
-                                                            )}
-                                                        </tr>
-                                                    ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            )}
+                            </div>
                         </div>
                     )}
                     <div className="row">
@@ -1189,69 +323,3 @@ const UsersPage = () => {
 };
 
 export default UsersPage;
-
-const OPTIONS = [
-    {
-        name: "",
-        value: "",
-    },
-];
-
-const recruiterOptions = [
-    {
-        value: "location",
-        name: "Location",
-    },
-    {
-        name: "Industry",
-        value: "industry",
-    },
-];
-
-const candidateOptions = [
-    {
-        value: "location",
-        name: "Location",
-    },
-    {
-        name: "Role",
-        value: "title",
-    },
-    {
-        name: "Skills",
-        value: "skills",
-    },
-];
-
-const INDUSTRYOPTIONS = [
-    "Advertising, Arts & Media",
-    "Administration & Office Support",
-    "Accounting",
-    "Information & Communication Technology",
-    "Science & Technology",
-    "Banking & Financial Services",
-];
-
-const LOCATIONOPTIONS = ["London", "Nigeria"];
-
-const ROLEOPTIONS = ["Business Analyst", "Project Management"];
-
-const SKILLSOPRIONS = [
-    "Decision making",
-    "Prioritization",
-    "Organisation",
-    "Problem solving",
-    "Communication",
-    "Critical thinking",
-    "Presentation skills",
-    "Business analysis",
-    "Agile working",
-    "Business process improvement",
-    "Stake holder relationship management",
-    "Leadership",
-    "Coaching",
-    "Collaboration",
-    "Conflict resolution",
-    "Time management",
-    "Team building",
-];

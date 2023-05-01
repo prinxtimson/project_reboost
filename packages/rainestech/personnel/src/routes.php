@@ -11,8 +11,10 @@ use Rainestech\Personnel\Controllers\TaskController;
 Route::group(['middleware' => 'admin.api', 'prefix' => 'profile'], function () {
     Route::get('/skillset', [ProfileController::class, 'getSkillSets'])->name('skillset.index');
     Route::get('/recruiters', [ProfileController::class, 'recruiters'])->name('recruiter.index');
+    Route::get('/recruiters/by-date', [ProfileController::class, 'recruitersByDate'])->name('recruiter.by-date');
     Route::get('/', [ProfileController::class, 'getMyProfile'])->middleware('access:ROLE_PROFILE')->name('profile.index');
     Route::get('/candidates', [ProfileController::class, 'candidates'])->name('candidates.index');
+    Route::get('/candidates/by-date', [ProfileController::class, 'candidatesByDate'])->name('candidates.by-date');
     Route::get('/recruiters/{id}', [ProfileController::class, 'getRecruiterByUserID'])->name('recruiter.user.id');
     Route::get('/candidates/{id}', [ProfileController::class, 'getCandidateByUserID'])->name('candidate.user.id');
     Route::post('/recruiters', [ProfileController::class, 'saveRecruiter'])->middleware('access:ROLE_PROFILE,ROLE_ADMIN_RECRUITERS')->name('recruiter.save');
@@ -39,6 +41,7 @@ Route::group(['middleware' => 'admin.api', 'prefix' => 'chats'], function () {
 Route::group(['middleware' => 'admin.api', 'prefix' => 'search'], function () {
     Route::post('/', [SearchController::class, 'search'])->middleware('access:ROLE_SEARCH')->name('search.candidates');
     Route::get('/shortlist', [SearchController::class, 'myShortlist'])->middleware('access:ROLE_SEARCH,ROLE_SHORTLIST')->name('search.shortlist');
+    Route::get('/shortlist/by-date', [SearchController::class, 'getShortlistByDate'])->middleware('access:ROLE_SEARCH,ROLE_SHORTLIST,ROLE_ADMIN')->name('search.shortlist.by-date');
     Route::get('/terms/{id}', [SearchController::class, 'getSearchAnalytics'])->middleware('access:ROLE_SEARCH,ROLE_SHORTLIST,ROLE_ADMIN')->name('search.analytics');
     Route::get('/shortlist/{id}', [SearchController::class, 'getShortlist'])->middleware('access:ROLE_SEARCH,ROLE_SHORTLIST,ROLE_ADMIN')->name('search.recruiter.shortlist');
     Route::post('/shortlist', [SearchController::class, 'shortList'])->middleware('access:ROLE_SEARCH,ROLE_SHORTLIST')->name('search.shortlist.actions');

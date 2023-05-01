@@ -57,6 +57,10 @@ export const activitySlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.activity = null;
+            state.activities = [];
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -97,5 +101,5 @@ export const activitySlice = createSlice({
     },
 });
 
-export const { reset } = activitySlice.actions;
+export const { reset, clear } = activitySlice.actions;
 export default activitySlice.reducer;

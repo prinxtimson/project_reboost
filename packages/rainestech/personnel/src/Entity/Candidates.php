@@ -74,7 +74,7 @@ class Candidates extends BaseModel implements Auditable
 
     protected $table = 'profiles_candidates';
     protected $guarded = ['id'];
-    protected $dateFormat = 'Y-m-d h:m:s';
+    //protected $dateFormat = 'Y-m-d h:m:s';
     protected $with = ['user', 'projects'];
     protected $appends = ['fileNo', 'projectNo', 'skills'];
     protected $hidden = ['skillSet'];

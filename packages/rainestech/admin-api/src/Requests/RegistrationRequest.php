@@ -34,6 +34,7 @@ class RegistrationRequest extends FormRequest
                     'companyName' => 'required|string|between:10,200',
                     'description'  => 'required|between:3,250|string',
                     'website'  => 'nullable|between:3,100|string',
+                    'address'  => 'address|between:3,100|string',
                     'industry'  => 'required|between:3,200|string',
                     'type'  => 'string|required|between:2,100',
                     'size'  => 'string|required|between:2,100',

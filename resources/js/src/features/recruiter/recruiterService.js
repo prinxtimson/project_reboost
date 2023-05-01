@@ -22,6 +22,11 @@ const getRecruiterByUserId = async (uid) => {
     return res.data;
 };
 
+const getRecruitersByDate = async () => {
+    const res = await axios.get(`${API_URL}/by-date`);
+    return res.data;
+};
+
 const editRecruiters = async (data) => {
     const res = await axios.put(API_URL, data);
     return res.data;
@@ -46,6 +51,7 @@ const recruiterService = {
     getRecruiters,
     getNextPage,
     saveRecruiters,
+    getRecruitersByDate,
     getRecruiterByUserId,
     editRecruiters,
     verifyRecruiter,

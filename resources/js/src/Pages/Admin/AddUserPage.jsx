@@ -58,13 +58,16 @@ const AddUserPage = () => {
                 <div className="page-header">
                     <div className="row align-items-center">
                         <div className="col">
-                            <h3 className="page-title">Add User</h3>
+                            <h3 className="page-title">Add Admin</h3>
                             <ul className="breadcrumb">
                                 <li className="breadcrumb-item">
                                     <Link to="/dashboard">Dashboard</Link>
                                 </li>
+                                <li className="breadcrumb-item">
+                                    <Link to="/dashboard/admin">Admin</Link>
+                                </li>
                                 <li className="breadcrumb-item active">
-                                    Add User
+                                    Add Admin
                                 </li>
                             </ul>
                         </div>
@@ -73,163 +76,155 @@ const AddUserPage = () => {
 
                 <div className="animated fadeIn bg-white shadow rounded overflow-hidden p-4 my-3">
                     <form
-                        className="form g-3"
+                        className="form g-3 py-3"
                         autoComplete="off"
                         onSubmit={handleOnSubmit}
                     >
-                        <div className="modal-header">
-                            <h4 className="modal-title">{}</h4>
+                        <div className="row mb-3 ">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="username"
+                            >
+                                Username
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    className="form-control"
+                                    name="username"
+                                    id="username"
+                                    value={formData.username}
+                                    type="text"
+                                    autoComplete="new-username"
+                                    onChange={handleOnChange}
+                                    placeholder="Username"
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Username is required</div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="modal-body">
-                            <div className="row">
-                                <div className="form-group col-sm-6">
-                                    <label htmlFor="username">Username</label>
-                                    <input
-                                        className="form-control"
-                                        name="username"
-                                        id="username"
-                                        value={formData.username}
-                                        type="text"
-                                        autoComplete="new-username"
-                                        onChange={handleOnChange}
-                                    />
-                                    <div className="invalid-feedback">
-                                        <div>User Name is required</div>
-                                    </div>
-                                </div>
-                                <div className="form-group col-sm-6">
-                                    <label htmlFor="lastName">Email</label>
-                                    <input
-                                        className="form-control"
-                                        name="email"
-                                        id="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleOnChange}
-                                    />
-                                    <div className="invalid-feedback">
-                                        <div>Email is required</div>
-                                    </div>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="firstName"
+                            >
+                                First Name
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    className="form-control"
+                                    name="firstName"
+                                    id="firstName"
+                                    value={formData.firstName}
+                                    type="text"
+                                    onChange={handleOnChange}
+                                    placeholder="First Name"
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Firstname is required</div>
                                 </div>
                             </div>
-                            {/* <!--/.row--> */}
-                            <div className="row">
-                                <div className="form-group col-sm-6">
-                                    <label htmlFor="firstName">
-                                        First Name
-                                    </label>
-                                    <input
-                                        className="form-control"
-                                        name="firstName"
-                                        id="firstName"
-                                        value={formData.firstName}
-                                        type="text"
-                                        onChange={handleOnChange}
-                                    />
-                                    <div className="invalid-feedback">
-                                        <div>First Name is required</div>
-                                    </div>
-                                </div>
-                                <div className="form-group col-sm-6">
-                                    <label htmlFor="lastName">Last Name</label>
-                                    <input
-                                        className="form-control"
-                                        name="lastName"
-                                        value={formData.lastName}
-                                        id="lastName"
-                                        type="text"
-                                        onChange={handleOnChange}
-                                    />
-                                    <div className="invalid-feedback">
-                                        <div>Last name is required</div>
-                                    </div>
-                                </div>
-                                <div className="form-group col-sm-6">
-                                    <label htmlFor="location">Location</label>
-                                    <input
-                                        className="form-control"
-                                        name="location"
-                                        value={formData.location}
-                                        id="location"
-                                        type="text"
-                                        onChange={handleOnChange}
-                                    />
-                                    <div className="invalid-feedback">
-                                        <div>Last location is required</div>
-                                    </div>
-                                </div>
-                                <div className="form-group col-sm-6">
-                                    <label htmlFor="phoneNo">
-                                        Company Name
-                                    </label>
-                                    <input
-                                        className="form-control"
-                                        name="companyName"
-                                        value={formData.companyName}
-                                        id="phoneNo"
-                                        onChange={handleOnChange}
-                                        placeholder="Company Name (Leave blank For candidates)..."
-                                        type="text"
-                                    />
-                                    <div className="invalid-feedback">
-                                        <div></div>
-                                    </div>
+                        </div>
+                        <div className="row mb-3 ">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="lastName"
+                            >
+                                Last Name
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    className="form-control"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    id="lastName"
+                                    type="text"
+                                    onChange={handleOnChange}
+                                    placeholder="Last Name"
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Last name is required</div>
                                 </div>
                             </div>
-                            {/* <!--/.row--> */}
+                        </div>
 
-                            {/* <div className="form-group row">
-                                <label
-                                    htmlFor="select1"
-                                    className="col-md-6 col-form-label"
-                                >
-                                    Account Status
-                                </label>
-                                <div className="col-md-6">
-                                    <select
-                                        id="select1"
-                                        name="status"
-                                        value={formData.status}
-                                        className="form-control"
-                                        onChange={handleOnChange}
-                                    >
-                                        <option value="1">Activate</option>
-                                        <option value="0">Deactivate</option>
-                                    </select>
-                                </div>
-                            </div> */}
-                            <div className="form-group row">
-                                <label
-                                    htmlFor="select2"
-                                    className="col-md-6 col-form-label"
-                                >
-                                    User's Role
-                                </label>
-                                <div className="col-md-6">
-                                    <select
-                                        id="select2"
-                                        name="role"
-                                        value={formData.role}
-                                        className="form-control"
-                                        onChange={handleOnChange}
-                                    >
-                                        <option value="ADMIN">ADMIN</option>
-                                        <option value="RECRUITER">
-                                            RECRUITER
-                                        </option>
-                                        <option value="CANDIDATE">
-                                            CANDIDATE
-                                        </option>
-                                    </select>
+                        <div className="row mb-3 ">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="lastName"
+                            >
+                                Email
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    className="form-control"
+                                    name="email"
+                                    id="email"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={handleOnChange}
+                                    placeholder="Email"
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Email is required</div>
                                 </div>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="roles">Password</label>
+                        </div>
+
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="phoneNo"
+                            >
+                                Phone Number
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    type="text"
+                                    className="form-control "
+                                    placeholder="Phone Number"
+                                    name="phoneNo"
+                                    id="floatingInput"
+                                    value={formData.phoneNo}
+                                    onChange={handleOnChange}
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="location"
+                            >
+                                Location
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    className="form-control"
+                                    name="location"
+                                    value={formData.location}
+                                    id="location"
+                                    type="text"
+                                    onChange={handleOnChange}
+                                    placeholder="Location"
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Location is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="roles"
+                            >
+                                Password
+                            </label>
+                            <div className="col-sm-8">
                                 <input
                                     className="form-control"
                                     name="password"
-                                    id="roles"
-                                    placeholder=" password"
+                                    placeholder="Password"
                                     value={formData.password}
                                     type="password"
                                     autoComplete="new-password"
@@ -241,31 +236,39 @@ const AddUserPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="roles">Confirm Password</label>
+                        </div>
+                        <div className="row mb-3">
+                            <label
+                                className="col-sm-4 col-form-label"
+                                htmlFor="roles"
+                            >
+                                Confirm Password
+                            </label>
+                            <div className="col-sm-8">
                                 <input
                                     className="form-control"
                                     name="password_confirmation"
                                     value={formData.password_confirmation}
-                                    id="roles2"
                                     type="password"
                                     onChange={handleOnChange}
+                                    placeholder="Confirm Password"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Password do not match</div>
                                 </div>
                             </div>
                         </div>
+
                         <div className="modal-footer">
+                            <button className="btn btn-primary" type="submit">
+                                Create Admin
+                            </button>
                             <Link
                                 className="btn btn-secondary"
-                                to="/dashboard/users"
+                                to="/dashboard/admin"
                             >
                                 Back
                             </Link>
-                            <button className="btn btn-primary" type="submit">
-                                Save User
-                            </button>
                         </div>
                         {isError && type === "user/add-new-user/rejected" && (
                             <div className="alert alert-danger mt-2">

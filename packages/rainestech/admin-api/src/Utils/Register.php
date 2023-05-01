@@ -2,6 +2,7 @@
 
 namespace Rainestech\AdminApi\Utils;
 
+use App\Notifications\NewTask;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\JsonResponse;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Rainestech\AdminApi\Entity\Roles;
 use Rainestech\AdminApi\Entity\Users;
 use Rainestech\AdminApi\Notifications\EmailVerification;
@@ -45,10 +47,18 @@ trait Register {
                 $recruiters = new Recruiters($request->except(['logo', 'username', 'password']));
                 $recruiters->userId = $user->id;
                 $recruiters->save();
-                Tasks::create([
-                    'title' => 'Recruiter Approval',
-                    'description' => $recruiters->companyName . ' is awaiting approval',
-                ]);
+                $task = Tasks::create([
+                            'title' => 'Recruiter Approval',
+                            'description' => $recruiters->companyName . ' is awaiting approval',
+                            'data' => json_encode($recruiters)
+                        ]);
+                if($task){
+                    $admins = Users::whereHas(
+                        'roles', function($q){
+                            $q->where('role', 'ADMIN');
+                        })->get();
+                    Notification::send($admins, new NewTask($task));
+                }
             }
         }
 
@@ -133,8 +143,10 @@ trait Register {
             'adminVerified' => $adminVerified,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'companyName' => $data['companyName'],
-            'location' => $data['location']
+            'companyName' => $data['companyName'] ?? null,
+            'phoneNo' => $data['phoneNo'] ?? null,
+            'location' => $data['location'] ?? null,
+            'postCode' => $data['postCode'] ?? null,
         ]);
     }
 

@@ -132,6 +132,12 @@ export const roleSlice = createSlice({
             state.type = "";
             state.message = "";
         },
+        clear: (state) => {
+            state.roles = null;
+            state.domains = null;
+            state.privileges = null;
+            state.role = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -238,5 +244,5 @@ export const roleSlice = createSlice({
     },
 });
 
-export const { reset } = roleSlice.actions;
+export const { reset, clear } = roleSlice.actions;
 export default roleSlice.reducer;
