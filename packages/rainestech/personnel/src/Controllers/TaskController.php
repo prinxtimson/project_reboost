@@ -44,7 +44,7 @@ class TaskController extends BaseApiController
         $task->update();
 
         Activities::create([
-            'type' => 'Assigned a task',
+            'type' => 'Assigned a ' . $task->title . ' task',
             'userID' => $userID
         ]);
 
@@ -69,7 +69,7 @@ class TaskController extends BaseApiController
             if($request->input('status') == '3'){
                 $task->completedAt = Carbon::now();
                 Activities::create([
-                    'type' => 'Completed a task',
+                    'type' => 'Completed a ' . $task->title . ' task',
                     'userID' => $task->userID
                 ]);
             }
@@ -104,7 +104,7 @@ class TaskController extends BaseApiController
         $task->refresh()->load('user');
 
         Activities::create([
-            'type' => 'Completed a task',
+            'type' => 'Completed a ' . $task->title . ' task',
             'userID' => $task->userID
         ]);
     
@@ -117,6 +117,16 @@ class TaskController extends BaseApiController
             return $this->jsonError(404, 'Task Not Found');
 
         $task->delete();
+
+        return response()->json($task);
+    }
+
+    public function deleteTask($id)
+    {
+        if (!$task = Tasks::find($id))
+            return $this->jsonError(404, 'Task Not Found');
+
+        $task->forceDelete();
 
         return response()->json($task);
     }

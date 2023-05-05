@@ -65,7 +65,7 @@ class Projects extends BaseModel
 {
     protected $table = 'projects';
     protected $guarded = ['id'];
-    protected $dateFormat = 'Y-m-d h:m:s';
+    //protected $dateFormat = 'Y-m-d h:m:s';
 
     protected $with = ['docs', 'leader'];
 

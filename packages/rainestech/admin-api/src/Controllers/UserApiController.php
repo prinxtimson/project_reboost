@@ -200,7 +200,7 @@ class UserApiController extends BaseApiController {
             }
             $user = auth('api')->user();
 
-            if ($user->companyName == null) {
+            if ($user->role == "CANDIDATE") {
              if (!Candidates::where("email", $user->email)->orderBy('id', 'desc')->exists()) {
                  return response()->json('Candidate profile not found!', 403);
              }

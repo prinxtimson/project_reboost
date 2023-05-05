@@ -39,7 +39,13 @@ const updateTask = async (data) => {
 };
 
 const archiveTask = async (id) => {
-    const res = await axios.delete(`${API_URL}/${id}`);
+    const res = await axios.delete(`${API_URL}/archive/${id}`);
+
+    return res.data;
+};
+
+const deleteTask = async (id) => {
+    const res = await axios.delete(`${API_URL}/remove/${id}`);
 
     return res.data;
 };
@@ -51,6 +57,7 @@ const taskService = {
     assignTask,
     markTaskComplete,
     archiveTask,
+    deleteTask,
     updateTask,
 };
 

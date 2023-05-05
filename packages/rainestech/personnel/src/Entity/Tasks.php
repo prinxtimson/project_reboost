@@ -54,7 +54,7 @@ class Tasks extends Model {
     
     protected $table = 'admin_tasks';
     protected $guarded = ['id'];
-    protected $dateFormat = 'Y-m-d h:m:s';
+    // protected $dateFormat = 'Y-m-d h:m:s';
     protected $casts = [ 'data' => 'array' ];
 
     public function user()

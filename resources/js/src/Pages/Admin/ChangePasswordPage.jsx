@@ -76,7 +76,6 @@ const ChangePasswordPage = () => {
                                     autoComplete="old-password"
                                     className="form-control"
                                     name="oldPassword"
-                                    placeholder="Current Password"
                                     onChange={handleOnChange}
                                     required
                                     type={`${oldVisible ? "text" : "password"}`}
@@ -116,7 +115,6 @@ const ChangePasswordPage = () => {
                                     autoComplete="new-password"
                                     className="form-control"
                                     name="password"
-                                    placeholder="New Password"
                                     onChange={handleOnChange}
                                     required
                                     type={`${visible ? "text" : "password"}`}
@@ -161,7 +159,6 @@ const ChangePasswordPage = () => {
                                 <input
                                     className="form-control "
                                     name="password_confirmation"
-                                    placeholder="Confirm New Password"
                                     onChange={handleOnChange}
                                     required
                                     type={`${visible ? "text" : "password"}`}

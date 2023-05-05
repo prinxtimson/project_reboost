@@ -88,7 +88,8 @@ Route::group(['middleware' => 'admin.api', 'prefix' => 'tasks'], function () {
     Route::get('assign/{id}/{userID}', [TaskController::class, 'assignTask'])->name('task.assign');
     Route::get('mark/{id}', [TaskController::class, 'markComplete'])->name('task.complete');
     Route::put('{id}', [TaskController::class, 'update'])->name('task.update');
-    Route::delete('{id}', [TaskController::class, 'archiveTask'])->name('task.archive');
+    Route::delete('archive/{id}', [TaskController::class, 'archiveTask'])->name('task.archive');
+    Route::delete('remove/{id}', [TaskController::class, 'deleteTask'])->name('task.delete');
 });
 
 Route::group(['middleware' => 'admin.api', 'prefix' => 'activities'], function () {

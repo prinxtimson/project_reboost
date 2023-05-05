@@ -137,6 +137,24 @@ export const archiveTask = createAsyncThunk(
     }
 );
 
+export const deleteTask = createAsyncThunk(
+    "task/delete-task",
+    async (args, thunkAPI) => {
+        try {
+            return await taskService.deleteTask(args);
+        } catch (err) {
+            const msg =
+                (err.response &&
+                    err.response.data &&
+                    err.response.data.message) ||
+                err.message ||
+                err.toString();
+
+            return thunkAPI.rejectWithValue(msg);
+        }
+    }
+);
+
 export const taskSlice = createSlice({
     name: "task",
     initialState,
@@ -271,6 +289,28 @@ export const taskSlice = createSlice({
                 state.message = "Task archive successful";
             })
             .addCase(archiveTask.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.type = action.type;
+                state.message = action.payload;
+            })
+            .addCase(deleteTask.pending, (state, action) => {
+                state.isLoading = true;
+                state.type = action.type;
+            })
+            .addCase(deleteTask.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.task = action.payload;
+                const ind = state.tasks.findIndex(
+                    (val) => val.id === action.payload.id
+                );
+                state.tasks.splice(ind, 1);
+                state.tasks = [...state.tasks];
+                state.type = action.type;
+                state.message = "Task delete successful";
+            })
+            .addCase(deleteTask.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.type = action.type;

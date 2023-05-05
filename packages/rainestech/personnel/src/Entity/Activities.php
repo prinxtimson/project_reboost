@@ -30,7 +30,7 @@ use Rainestech\AdminApi\Entity\Users;
 class Activities extends Model {
     protected $table = 'admin_activities';
     protected $guarded = ['id'];
-    protected $dateFormat = 'Y-m-d h:m:s';
+    //protected $dateFormat = 'Y-m-d h:m:s';
 
     public function user()
     {

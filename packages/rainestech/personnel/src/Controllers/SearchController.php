@@ -2,6 +2,7 @@
 
 namespace Rainestech\Personnel\Controllers;
 
+use App\Notifications\NewTask;
 use App\Notifications\NotShortlisted;
 use App\Notifications\Shortlisted;
 use Carbon\Carbon;
@@ -17,6 +18,7 @@ use Rainestech\Personnel\Requests\SearchRequest;
 use Rainestech\Personnel\Requests\ShortListRequest;
 use Rainestech\Personnel\Requests\SnippetRequest;
 use Illuminate\Support\Facades\Notification;
+use Rainestech\AdminApi\Entity\Users;
 use Rainestech\Personnel\Entity\Tasks;
 use Ramsey\Uuid\Uuid;
 
@@ -114,12 +116,20 @@ class SearchController extends BaseApiController
             if (!$profile->candidates()->find($request->input('id'))) {
                 $profile->candidates()->attach($request->input('id'));
 
-                $user->notify(new Shortlisted($profile));
+                //$user->notify(new Shortlisted($profile));
 
-                Tasks::create([
+                $task = Tasks::create([
                     'title' => 'Candidate Shortlisted',
                     'description' => $candidate->name . ' had been shortlisted by ' . $profile->companyName,
+                    'data' => json_encode($candidate)
                 ]);
+                if($task){
+                    $admins = Users::whereHas(
+                        'roles', function($q){
+                            $q->where('role', 'ADMIN');
+                        })->get();
+                    Notification::send($admins, new NewTask($task));
+                }
             }
         }else {
             $profile->candidates()->detach($request->input('id'));

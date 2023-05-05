@@ -75,7 +75,7 @@ class Recruiters extends BaseModel implements Auditable
     protected $table = 'profiles_recruiters';
     protected $guarded = ['id'];
 //    protected $dates = ['joinDate', 'dob'];
-    protected $dateFormat = 'Y-m-d h:m:s';
+   // protected $dateFormat = 'Y-m-d h:m:s';
 
     protected $appends = ['fileNo', 'candNo', 'name'];
     protected $with = ['user', 'logo'];

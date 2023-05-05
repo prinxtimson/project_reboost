@@ -15,6 +15,17 @@ import { toast } from "react-toastify";
 const DocumentsPage = () => {
     const [inputRef, setInputRef] = useState(null);
     const [file, setFile] = useState(null);
+    const validFileExt = [
+        "xls",
+        "xlsx",
+        "doc",
+        "docx",
+        "csv",
+        "pdf",
+        "jpeg",
+        "png",
+        "jpg",
+    ];
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -66,6 +77,29 @@ const DocumentsPage = () => {
         dispatch(saveDocs(_data));
     };
 
+    const handleDragOver = (e) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        let fileExt = e.dataTransfer.files[0].name.split(".")[1];
+        if (!validFileExt.includes(fileExt)) {
+            toast.error("Invalid file input");
+            return;
+        }
+
+        setFile(e.dataTransfer.files[0]);
+        let _data = new FormData();
+        _data.append("file", e.dataTransfer.files[0]);
+        _data.append("fileType", e.dataTransfer.files[0].type);
+        _data.append("name", e.dataTransfer.files[0].name);
+        _data.append("tag", "documents");
+        _data.append("objID", user.id);
+
+        dispatch(saveDocs(_data));
+    };
+
     return (
         <AuthContainer>
             <div className="p-4">
@@ -95,6 +129,8 @@ const DocumentsPage = () => {
                             <div
                                 className="upload-drop-zone py-5"
                                 id="drop-zone"
+                                onDragOver={handleDragOver}
+                                onDrop={handleDrop}
                             >
                                 {!file ? (
                                     <i className="fa fa-cloud-upload fa-4x d-block"></i>

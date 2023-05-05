@@ -191,7 +191,14 @@ const AuthContainer = ({ children }) => {
                                                                     : "font-weight-bold w-100"
                                                             }
                                                         >
-                                                            New task available
+                                                            {item.read_at
+                                                                ? ""
+                                                                : "New "}
+                                                            {
+                                                                item.data.task
+                                                                    .title
+                                                            }{" "}
+                                                            task available.
                                                         </div>
                                                     ) : (
                                                         <div

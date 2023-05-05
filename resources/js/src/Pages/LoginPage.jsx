@@ -33,8 +33,19 @@ const LoginPage = () => {
         // return () => dispatch(reset());
     }, [isLoading, isSuccess, isError]);
 
+    useEffect(() => {
+        setFormData({
+            username: localStorage.getItem("tritek_career_username") || "",
+            password: localStorage.getItem("tritek_career_pass") || "",
+        });
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (remember_me) {
+            localStorage.setItem("tritek_career_username", username);
+            localStorage.setItem("tritek_career_pass", password);
+        }
         dispatch(login(formData));
     };
 

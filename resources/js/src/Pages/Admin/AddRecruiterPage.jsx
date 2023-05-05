@@ -98,10 +98,8 @@ const AddRecruiterPage = () => {
                                     className="form-control"
                                     name="companyName"
                                     value={formData.companyName}
-                                    id="companyName"
                                     onChange={handleOnChange}
                                     type="text"
-                                    placeholder="Recruiter Name"
                                 />
                                 <div className="invalid-feedback">
                                     <div></div>
@@ -114,41 +112,41 @@ const AddRecruiterPage = () => {
                                 htmlFor="firstName"
                                 className="col-sm-4 col-form-label"
                             >
-                                Contact Name
+                                Firstname
                             </label>
 
                             <div className="col-sm-8">
-                                <div className="row">
-                                    <div className="col-6">
-                                        <input
-                                            className="form-control"
-                                            name="firstName"
-                                            id="firstName"
-                                            value={formData.firstName}
-                                            type="text"
-                                            onChange={handleOnChange}
-                                            placeholder="First Name"
-                                            required
-                                        />
-                                        <div className="invalid-feedback">
-                                            <div>Firstname is required</div>
-                                        </div>
-                                    </div>
-                                    <div className="col-6">
-                                        <input
-                                            className="form-control"
-                                            name="lastName"
-                                            value={formData.lastName}
-                                            id="lastName"
-                                            type="text"
-                                            onChange={handleOnChange}
-                                            placeholder="Last Name"
-                                            required
-                                        />
-                                        <div className="invalid-feedback">
-                                            <div>Lastname is required</div>
-                                        </div>
-                                    </div>
+                                <input
+                                    className="form-control"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    type="text"
+                                    onChange={handleOnChange}
+                                    required
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Firstname is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row mb-3">
+                            <label
+                                htmlFor="lastName"
+                                className="col-sm-4 col-form-label"
+                            >
+                                Lastname
+                            </label>
+                            <div className="col-sm-8">
+                                <input
+                                    className="form-control"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    type="text"
+                                    onChange={handleOnChange}
+                                    required
+                                />
+                                <div className="invalid-feedback">
+                                    <div>Lastname is required</div>
                                 </div>
                             </div>
                         </div>
@@ -162,10 +160,8 @@ const AddRecruiterPage = () => {
                             <div className="col-sm-8">
                                 <input
                                     type="text"
-                                    className="form-control "
-                                    placeholder="Address"
+                                    className="form-control"
                                     name="address"
-                                    id="floatingInput"
                                     value={formData.address}
                                     onChange={handleOnChange}
                                 />
@@ -182,9 +178,7 @@ const AddRecruiterPage = () => {
                                 <input
                                     type="text"
                                     className="form-control "
-                                    placeholder="Phone Number"
                                     name="phoneNo"
-                                    id="floatingInput"
                                     value={formData.phoneNo}
                                     onChange={handleOnChange}
                                 />
@@ -202,11 +196,9 @@ const AddRecruiterPage = () => {
                                 <input
                                     className="form-control"
                                     name="email"
-                                    id="email"
                                     type="email"
                                     value={formData.email}
                                     onChange={handleOnChange}
-                                    placeholder="Email Address"
                                     required
                                 />
                                 <div className="invalid-feedback">
@@ -226,12 +218,10 @@ const AddRecruiterPage = () => {
                                 <input
                                     className="form-control"
                                     name="username"
-                                    id="username"
                                     value={formData.username}
                                     type="text"
                                     autoComplete="new-username"
                                     onChange={handleOnChange}
-                                    placeholder="Username"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Username is required</div>
@@ -243,17 +233,15 @@ const AddRecruiterPage = () => {
                                 htmlFor="website"
                                 className="col-sm-4 col-form-label"
                             >
-                                Wedsite
+                                Website
                             </label>
                             <div className="col-sm-8">
                                 <input
                                     className="form-control"
                                     name="website"
                                     value={formData.website}
-                                    id="website"
                                     type="text"
                                     onChange={handleOnChange}
-                                    placeholder="Wedsite"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Website is required</div>
@@ -272,10 +260,8 @@ const AddRecruiterPage = () => {
                                     className="form-control"
                                     name="location"
                                     value={formData.location}
-                                    id="location"
                                     type="text"
                                     onChange={handleOnChange}
-                                    placeholder="Country"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Country is required</div>
@@ -293,7 +279,6 @@ const AddRecruiterPage = () => {
                                 <input
                                     className="form-control"
                                     name="password"
-                                    placeholder="Password"
                                     value={formData.password}
                                     type="password"
                                     autoComplete="new-password"
@@ -318,10 +303,8 @@ const AddRecruiterPage = () => {
                                     className="form-control"
                                     name="password_confirmation"
                                     value={formData.password_confirmation}
-                                    id="roles2"
                                     type="password"
                                     onChange={handleOnChange}
-                                    placeholder="Confirm Password"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Password do not match</div>

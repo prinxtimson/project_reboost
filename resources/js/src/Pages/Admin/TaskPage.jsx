@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import AuthContainer from "../../components/AuthContainer";
 import moment from "moment";
@@ -9,6 +9,7 @@ import {
     reset,
     updateTask,
     clear,
+    deleteTask,
 } from "../../features/task/taskSlice";
 import { toast } from "react-toastify";
 import { getAdmins } from "../../features/user/userSlice";
@@ -17,6 +18,7 @@ const TaskPage = () => {
     const { id } = useParams();
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { task, isLoading, isError, isSuccess, message, type } = useSelector(
         (state) => state.task
@@ -40,9 +42,13 @@ const TaskPage = () => {
             isSuccess &&
             (type == "task/get-task/fulfilled" ||
                 type == "task/update-task/fulfilled" ||
-                type == "task/archive-task/fulfilled")
+                type == "task/archive-task/fulfilled" ||
+                type == "task/delete-task/fulfilled")
         ) {
             toast.success(message, { onClose: () => dispatch(reset()) });
+            if (type == "task/delete-task/fulfilled") {
+                navigate("/dashboard/task-manager");
+            }
         }
     }, [isLoading, isSuccess, isError]);
 
@@ -60,6 +66,12 @@ const TaskPage = () => {
 
     const handleArchiveClick = () => {
         dispatch(archiveTask(task.id));
+    };
+
+    const handleDelete = () => {
+        if (window.confirm(`Are you sure you want to delete task?`)) {
+            dispatch(deleteTask(task.id));
+        }
     };
 
     return (
@@ -109,7 +121,30 @@ const TaskPage = () => {
                                         </div>
                                         <div className="col-12 col-md-8">
                                             <p className="fw-bold">
-                                                {task?.description || ""}
+                                                <Link
+                                                    to={
+                                                        JSON.parse(task.data)
+                                                            .user.role ==
+                                                        "RECRUITER"
+                                                            ? `/dashboard/recruiters/view/${
+                                                                  JSON.parse(
+                                                                      task.data
+                                                                  ).userId
+                                                              }`
+                                                            : JSON.parse(
+                                                                  task.data
+                                                              ).user.role ==
+                                                              "CANDIDATE"
+                                                            ? `/dashboard/candidates/view/${
+                                                                  JSON.parse(
+                                                                      task.data
+                                                                  ).userId
+                                                              }`
+                                                            : `#`
+                                                    }
+                                                >
+                                                    {task?.description || ""}
+                                                </Link>
                                             </p>
                                         </div>
                                     </div>
@@ -141,8 +176,11 @@ const TaskPage = () => {
                                     </div>
 
                                     <div className="py-3">
-                                        <div className="mb-2">
+                                        <div className="mb-4">
                                             <div className="form-group form-focus">
+                                                <label htmlFor="status">
+                                                    Status
+                                                </label>
                                                 <select
                                                     className="form-select "
                                                     placeholder="Select Status"
@@ -168,6 +206,9 @@ const TaskPage = () => {
 
                                         <div className="mb-2">
                                             <div className="form-group form-focus">
+                                                <label htmlFor="category">
+                                                    Category
+                                                </label>
                                                 <select
                                                     className="form-select "
                                                     placeholder="Select Category"
@@ -193,11 +234,18 @@ const TaskPage = () => {
                                     </div>
                                 </div>
                                 <div className="col-12 col-md-6">
-                                    <div className="mb-4">
+                                    <div className="mb-4 d-grid gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={handleDelete}
+                                            className="btn btn-danger"
+                                        >
+                                            Delete
+                                        </button>
                                         <button
                                             type="button"
                                             onClick={handleArchiveClick}
-                                            className="btn btn-primary mx-auto"
+                                            className="btn btn-primary "
                                         >
                                             Archive
                                         </button>
@@ -205,6 +253,9 @@ const TaskPage = () => {
 
                                     <div className="mb-2">
                                         <div className="form-group form-focus">
+                                            <label htmlFor="assign">
+                                                Assign
+                                            </label>
                                             <select
                                                 className="form-select "
                                                 placeholder="Assign User"

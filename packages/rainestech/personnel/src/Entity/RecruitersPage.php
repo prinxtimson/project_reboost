@@ -23,7 +23,7 @@ class RecruitersPage extends BaseModel
     protected $table = 'profiles_recruiters_page';
     protected $guarded = ['id'];
 //    protected $dates = ['joinDate', 'dob'];
-    protected $dateFormat = 'Y-m-d h:m:s';
+   // protected $dateFormat = 'Y-m-d h:m:s';
 
 //    protected $appends = ['name', 'states'];
 

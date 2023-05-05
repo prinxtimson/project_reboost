@@ -101,9 +101,7 @@ const EditProfilePage = () => {
                             <input
                                 type="text"
                                 className="form-control "
-                                placeholder="First name"
                                 name="firstName"
-                                id="floatingInput"
                                 value={firstName}
                                 onChange={handleOnChange}
                                 required
@@ -114,9 +112,7 @@ const EditProfilePage = () => {
                             <input
                                 type="text"
                                 className="form-control "
-                                placeholder="Surname"
                                 name="lastName"
-                                id="floatingInput"
                                 value={lastName}
                                 onChange={handleOnChange}
                                 required
@@ -127,9 +123,7 @@ const EditProfilePage = () => {
                             <input
                                 type="text"
                                 className="form-control "
-                                placeholder="Other name"
                                 name="otherName"
-                                id="floatingInput"
                                 value={otherName}
                                 onChange={handleOnChange}
                             />
@@ -139,9 +133,7 @@ const EditProfilePage = () => {
                             <input
                                 type="text"
                                 className="form-control "
-                                placeholder="Phone Number"
                                 name="phoneNo"
-                                id="floatingInput"
                                 value={phoneNo}
                                 onChange={handleOnChange}
                                 required
@@ -152,9 +144,7 @@ const EditProfilePage = () => {
                             <input
                                 type="text"
                                 className="form-control "
-                                placeholder="Post Code"
                                 name="postCode"
-                                id="floatingInput"
                                 value={postCode}
                                 onChange={handleOnChange}
                                 maxLength={8}

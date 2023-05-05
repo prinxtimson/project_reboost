@@ -91,12 +91,10 @@ const AddUserPage = () => {
                                 <input
                                     className="form-control"
                                     name="username"
-                                    id="username"
                                     value={formData.username}
                                     type="text"
                                     autoComplete="new-username"
                                     onChange={handleOnChange}
-                                    placeholder="Username"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Username is required</div>
@@ -114,11 +112,9 @@ const AddUserPage = () => {
                                 <input
                                     className="form-control"
                                     name="firstName"
-                                    id="firstName"
                                     value={formData.firstName}
                                     type="text"
                                     onChange={handleOnChange}
-                                    placeholder="First Name"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Firstname is required</div>
@@ -137,10 +133,8 @@ const AddUserPage = () => {
                                     className="form-control"
                                     name="lastName"
                                     value={formData.lastName}
-                                    id="lastName"
                                     type="text"
                                     onChange={handleOnChange}
-                                    placeholder="Last Name"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Last name is required</div>
@@ -159,11 +153,9 @@ const AddUserPage = () => {
                                 <input
                                     className="form-control"
                                     name="email"
-                                    id="email"
                                     type="email"
                                     value={formData.email}
                                     onChange={handleOnChange}
-                                    placeholder="Email"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Email is required</div>
@@ -182,9 +174,7 @@ const AddUserPage = () => {
                                 <input
                                     type="text"
                                     className="form-control "
-                                    placeholder="Phone Number"
                                     name="phoneNo"
-                                    id="floatingInput"
                                     value={formData.phoneNo}
                                     onChange={handleOnChange}
                                     required
@@ -203,10 +193,8 @@ const AddUserPage = () => {
                                     className="form-control"
                                     name="location"
                                     value={formData.location}
-                                    id="location"
                                     type="text"
                                     onChange={handleOnChange}
-                                    placeholder="Location"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Location is required</div>
@@ -224,7 +212,6 @@ const AddUserPage = () => {
                                 <input
                                     className="form-control"
                                     name="password"
-                                    placeholder="Password"
                                     value={formData.password}
                                     type="password"
                                     autoComplete="new-password"
@@ -251,7 +238,6 @@ const AddUserPage = () => {
                                     value={formData.password_confirmation}
                                     type="password"
                                     onChange={handleOnChange}
-                                    placeholder="Confirm Password"
                                 />
                                 <div className="invalid-feedback">
                                     <div>Password do not match</div>
